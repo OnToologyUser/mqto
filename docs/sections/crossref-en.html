@@ -46,7 +46,7 @@ This section provides details for each class and property defined by Manufacturi
   <h3>Actual Ishikawa Item<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
   <p><strong>IRI:</strong> https://w3id.org/mqto#ActualIshikawaItem</p>
   <div class="comment">
-   <span class="markdown">Abstract superclass for actual/instance layer counterparts of IshikawaItem. Integrates SOSA: each ActualIshikawaItem is a FeatureOfInterest that can be observed, has ObservableProperties, and can have FailureOccurrences. In die-casting (dga ontology), concrete instances include specific die-casting cells, material batches, and production runs.</span>
+   <span class="markdown">Abstract superclass for actual/instance layer counterparts of IshikawaItem. Integrates SOSA: each ActualIshikawaItem is a FeatureOfInterest that can be observed, has ObservableProperties, and can have FailureOccurrences. Concrete instances include specific machines, material batches, and production runs.</span>
   </div>
   <dl class="description">
    <dt>
@@ -229,7 +229,7 @@ This section provides details for each class and property defined by Manufacturi
   <h3>Ishikawa Item<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
   <p><strong>IRI:</strong> https://w3id.org/mqto#IshikawaItem</p>
   <div class="comment">
-   <span class="markdown">Abstract superclass for the three categories of root causes in an Ishikawa (fishbone) diagram: Machine, Material, and Method. In die-casting ontologies (dg.ttl), this pattern is instantiated with dg:Aggregate (equivalent to Machine), dg:Material, and dg:Process (equivalent to Method), plus dg:Product (output of manufacturing, no direct mqto equivalent).</span>
+   <span class="markdown">Abstract superclass for the three categories of root causes in an Ishikawa (fishbone) diagram: Machine, Material, and Method. Domain-specific ontologies can specialize these concepts for their manufacturing domain.</span>
   </div>
   <dl class="description">
    <dt>
@@ -289,7 +289,7 @@ This section provides details for each class and property defined by Manufacturi
   <h3>Machine<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
   <p><strong>IRI:</strong> https://w3id.org/mqto#Machine</p>
   <div class="comment">
-   <span class="markdown">Manufacturing equipment, tools, and devices (the 'M' in Ishikawa's Machine). Represents specified physical resources that participate in Methods. In die-casting, dg:Aggregate represents machines like die-casting cells, furnaces, and robots. Machines provide Signals (sensor readings, control channels) and can have associated Failures and Metrics.</span>
+   <span class="markdown">Manufacturing equipment, tools, and devices (the 'M' in Ishikawa's Machine). Represents specified physical resources that participate in Methods. Domain-specific ontologies can define specific machine types such as cells, furnaces, and robots. Machines provide Signals (sensor readings, control channels) and can have associated Failures and Metrics.</span>
   </div>
   <dl class="description">
    <dt>
@@ -304,7 +304,7 @@ This section provides details for each class and property defined by Manufacturi
   <h3>Material<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
   <p><strong>IRI:</strong> https://w3id.org/mqto#Material</p>
   <div class="comment">
-   <span class="markdown">Raw materials, consumables, and inputs to manufacturing (the 'M' in Ishikawa's Material). Represents specified material types that participate in Methods. In die-casting (dg:Material), this includes aluminum alloys, die lubricants, release agents, and other consumables. Materials can have properties monitored via Signals and associated quality Metrics.</span>
+   <span class="markdown">Raw materials, consumables, and inputs to manufacturing (the 'M' in Ishikawa's Material). Represents specified material types that participate in Methods. Domain-specific ontologies can define specific material types such as alloys, lubricants, and consumables. Materials can have properties monitored via Signals and associated quality Metrics.</span>
   </div>
   <dl class="description">
    <dt>
@@ -319,7 +319,7 @@ This section provides details for each class and property defined by Manufacturi
   <h3>Material Chunk<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
   <p><strong>IRI:</strong> https://w3id.org/mqto#MaterialChunk</p>
   <div class="comment">
-   <span class="markdown">Actual material instance, the instance-layer counterpart of Material. Represents specific batches, lots, or quantities of material with identifiers, composition data, and quality measurements. In die-casting (dga ontology), examples include specific aluminum alloy batches with batch numbers, chemical composition, and temperature observations.</span>
+   <span class="markdown">Actual material instance, the instance-layer counterpart of Material. Represents specific batches, lots, or quantities of material with identifiers, composition data, and quality measurements. Examples include specific material batches with batch numbers, chemical composition, and quality measurements.</span>
   </div>
   <dl class="description">
    <dt>
@@ -334,7 +334,7 @@ This section provides details for each class and property defined by Manufacturi
   <h3>Method<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
   <p><strong>IRI:</strong> https://w3id.org/mqto#Method</p>
   <div class="comment">
-   <span class="markdown">A manufacturing process or procedure (the 'M' in Ishikawa's Method). Represents the specified activities and steps in manufacturing. In die-casting (dg:Process), this includes operations like melting, injection, cooling, and demolding. Methods can be decomposed into sub-methods and have Machines and Materials as participants.</span>
+   <span class="markdown">A manufacturing process or procedure (the 'M' in Ishikawa's Method). Represents the specified activities and steps in manufacturing. This includes operations and procedures specific to the manufacturing domain. Methods can be decomposed into sub-methods and have Machines and Materials as participants.</span>
   </div>
   <dl class="description">
    <dt>
@@ -424,7 +424,7 @@ This section provides details for each class and property defined by Manufacturi
   <h3>Observation<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
   <p><strong>IRI:</strong> https://w3id.org/mqto#Observation</p>
   <div class="comment">
-   <span class="markdown">Subclass of sosa:Observation, representing a single sensor reading or measurement event. Links to an ActualIshikawaItem (feature of interest), an ObservableProperty (what is being measured), and a Result (the measured value). In die-casting (dga ontology), observations capture time-series data from PLCs, sensors, and SCADA systems - e.g., furnace temperature readings, die pressure measurements, cycle times.</span>
+   <span class="markdown">Subclass of sosa:Observation, representing a single sensor reading or measurement event. Links to an ActualIshikawaItem (feature of interest), an ObservableProperty (what is being measured), and a Result (the measured value). Observations capture time-series data from PLCs, sensors, and SCADA systems including temperature readings, pressure measurements, and cycle times.</span>
   </div>
   <dl class="description">
    <dt>
@@ -445,7 +445,7 @@ This section provides details for each class and property defined by Manufacturi
   <h3>Physical Machine<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
   <p><strong>IRI:</strong> https://w3id.org/mqto#PhysicalMachine</p>
   <div class="comment">
-   <span class="markdown">Actual machine instance, the instance-layer counterpart of Machine. Represents specific physical equipment with serial numbers, operational history, and sensor data. In die-casting (dga ontology), examples include specific die-casting cells (e.g., 'Cell_TCG_200'), furnaces, and robots with concrete observation data.</span>
+   <span class="markdown">Actual machine instance, the instance-layer counterpart of Machine. Represents specific physical equipment with serial numbers, operational history, and sensor data. Examples include specific manufacturing equipment with serial numbers, furnaces, and robots with concrete observation data.</span>
   </div>
   <dl class="description">
    <dt>
@@ -460,7 +460,7 @@ This section provides details for each class and property defined by Manufacturi
   <h3>Process Execution<sup class="type-c" title="class">c</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a> </span></h3>
   <p><strong>IRI:</strong> https://w3id.org/mqto#ProcessExecution</p>
   <div class="comment">
-   <span class="markdown">Actual execution of a Method, the instance-layer counterpart of Method. Links to concrete PhysicalMachines and MaterialChunks as participants. In die-casting (dga ontology), this represents actual production shots with specific machines, material batches, timestamps, and observation data. Note: ProcessExecution does not directly subclass lis:Activity (which is lis:Specified), but instead subclasses ActualIshikawaItem (lis:Actual) and implements Method (which is lis:Activity). This maintains the LIS distinction between specified and actual layers.</span>
+   <span class="markdown">Actual execution of a Method, the instance-layer counterpart of Method. Links to concrete PhysicalMachines and MaterialChunks as participants. This represents actual production operations with specific machines, material batches, timestamps, and observation data. Note: ProcessExecution does not directly subclass lis:Activity (which is lis:Specified), but instead subclasses ActualIshikawaItem (lis:Actual) and implements Method (which is lis:Activity). This maintains the LIS distinction between specified and actual layers.</span>
   </div>
   <dl class="description">
    <dt>
@@ -1411,7 +1411,7 @@ This section provides details for each class and property defined by Manufacturi
   <h3>result property<sup class="type-op" title="object property">op</sup> <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a> </span></h3>
   <p><strong>IRI:</strong> https://w3id.org/mqto#resultProperty</p>
   <div class="comment">
-   <span class="markdown">Meta-property that specifies which data property of sosa:Result instances should be extracted and used as input for this Metric's calculation. For example, if a Metric's resultProperty points to dga:measValue, the metric calculation will extract the measValue field from each Result instance within the specified time window. If it points to dga:diameter, it extracts the diameter values instead. This enables multiple metrics to derive different calculations from the same observation results by selecting different result attributes. Note: This is a meta-level construct (an object property pointing to data properties), which while not ideal OWL modeling practice, provides a simple declarative mechanism for metrics to specify their input data field without requiring complex extraction rules or SPARQL property paths.</span>
+   <span class="markdown">Meta-property that specifies which data property of sosa:Result instances should be extracted and used as input for this Metric's calculation. For example, a Metric's resultProperty can point to a specific data property of the Result to extract that field from each Result instance within the specified time window. This enables multiple metrics to derive different calculations from the same observation results by selecting different result attributes. Note: This is a meta-level construct (an object property pointing to data properties), which while not ideal OWL modeling practice, provides a simple declarative mechanism for metrics to specify their input data field without requiring complex extraction rules or SPARQL property paths.</span>
   </div>
   <div class="description">
    <dl>
