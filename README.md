@@ -1,0 +1,1 @@
+# Manufacturing Quality Troubleshooting Ontology
