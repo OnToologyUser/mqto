@@ -1,5 +1,7 @@
 # Manufacturing Quality Troubleshooting Ontology (MQTO)
 
+![MQTO Logo](logo.png)
+
 **Version:** 0.1.0  
 **Namespace:** `https://w3id.org/mqto#`  
 **Prefix:** `mqto`  
