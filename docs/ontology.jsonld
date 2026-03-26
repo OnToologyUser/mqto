@@ -629,7 +629,7 @@
     "@id" : "https://github.com/dg-assist/mqto"
   } ],
   "http://schema.org/funding" : [ {
-    "@id" : "https://www.ffg.at/en/project/4641766"
+    "@id" : "https://projekte.ffg.at/projekt/4641766"
   } ],
   "http://schema.org/logo" : [ {
     "@id" : "https://dg-assist.github.io/mqto/logo.png"
@@ -650,12 +650,6 @@
   } ],
   "http://www.w3.org/2000/01/rdf-schema#seeAlso" : [ {
     "@id" : "http://purl.org/net/p-plan"
-  }, {
-    "@id" : "https://projekte.ffg.at/projekt/4641766"
-  }, {
-    "@id" : "https://w3id.org/dgassist"
-  }, {
-    "@id" : "https://w3id.org/dgassist/actual"
   }, {
     "@id" : "https://w3id.org/pko/1.0.0"
   } ],

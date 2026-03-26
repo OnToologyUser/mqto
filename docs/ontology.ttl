@@ -31,16 +31,13 @@
                          <http://purl.org/vocab/vann/preferredNamespacePrefix> "mqto" ;
                          <http://purl.org/vocab/vann/preferredNamespaceUri> "https://w3id.org/mqto#" ;
                          <http://schema.org/codeRepository> <https://github.com/dg-assist/mqto> ;
-                         <http://schema.org/funding> <https://www.ffg.at/en/project/4641766> ;
+                         <http://schema.org/funding> <https://projekte.ffg.at/projekt/4641766> ;
                          <http://schema.org/logo> <https://dg-assist.github.io/mqto/logo.png> ;
                          rdfs:comment "Relationship to Procedural Knowledge Ontology (PKO): mqto countermeasure classes align with PKO procedure modeling patterns. mqto:Countermeasure is a subclass of pko:Procedure, representing remediation procedures in the specified layer. mqto:CountermeasureStep aligns with p-plan:Step for individual actions. In the actual layer, mqto:CountermeasureExecution extends pko:ProcedureExecution and mqto:CountermeasureStepExecution extends pko:StepExecution. Both ontologies follow a specification/execution (plan/actual) pattern, though mqto uses LIS (lis:Specified/lis:Actual with lis:implements) while PKO uses P-PLAN/PROV (with pko:executesProcedure/pko:executesStep). Key architectural difference: mqto externalizes step ordering via mqto:List containers for step reusability across procedures, while PKO embeds ordering directly in steps via pko:nextStep properties."@en ,
                                       "Relationship to die-casting ontologies: This ontology (mqto) is a domain-independent generalization of the die-casting quality inspection ontologies. The die-casting Base Model (dg.ttl, namespace https://w3id.org/dgassist#) represents the specified layer for die-casting with domain-specific classes such as Aggregate, Process, Material, and Product. The die-casting Actual Ontology (dga.ttl, namespace https://w3id.org/dgassist/actual#) extends this to the actual/instance layer with observation data and process executions. Both mqto and the die-casting ontologies build upon the LIS (Lifecycle Information System) upper ontology and integrate SOSA/SSN for observations."@en ;
                          rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
                          rdfs:label "Manufacturing Quality Troubleshooting Ontology"@en ;
                          rdfs:seeAlso <http://purl.org/net/p-plan> ,
-                                      <https://projekte.ffg.at/projekt/4641766> ,
-                                      <https://w3id.org/dgassist> ,
-                                      <https://w3id.org/dgassist/actual> ,
                                       <https://w3id.org/pko/1.0.0> ;
                          owl:versionInfo "1.0.0" ;
                          <http://xmlns.com/foaf/0.1/homepage> <https://dg-assist.github.io/mqto/> .
