@@ -1,0 +1,34 @@
+# CQ-07: Which measurement data are available for a given item?
+#
+# This query retrieves all observations (measurement data) associated with
+# a specific actual item (machine, material chunk, or process execution).
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX ssn: <http://www.w3.org/ns/ssn/>
+
+SELECT ?observation ?property ?propertyLabel ?resultTime ?value ?sensor
+WHERE {
+  # Bind the target item to investigate
+  BIND(<https://w3id.org/mqto/example#Machine4115> AS ?targetItem)
+
+  # Find observations of this item
+  ?observation a sosa:Observation ;
+               sosa:hasFeatureOfInterest ?targetItem ;
+               sosa:observedProperty ?property ;
+               sosa:resultTime ?resultTime .
+
+  ?property rdfs:label ?propertyLabel .
+
+  # Retrieve the measurement value
+  OPTIONAL {
+    ?observation sosa:hasSimpleResult ?value .
+  }
+
+  # Retrieve the sensor that made the observation
+  OPTIONAL {
+    ?observation sosa:madeBySensor ?sensor .
+  }
+}
+ORDER BY DESC(?resultTime)

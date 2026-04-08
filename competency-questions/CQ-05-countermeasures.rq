@@ -1,0 +1,38 @@
+# CQ-05: Which countermeasures and execution steps are associated with a failure or were carried out?
+#
+# This query retrieves countermeasures associated with a failure type (specified layer)
+# and optionally actual countermeasure executions (actual layer).
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lis: <http://rds.posccaesar.org/ontology/lis14/rdl/>
+
+SELECT ?countermeasure ?cmLabel ?step ?stepLabel ?execution ?executionTime ?rejected
+WHERE {
+  # Bind the target failure to investigate
+  BIND(<https://w3id.org/mqto/example#Porosity> AS ?targetFailure)
+
+  # Find countermeasures that mitigate this failure
+  ?targetFailure mqto:mitigatedBy ?countermeasure .
+  ?countermeasure rdfs:label ?cmLabel .
+
+  # Retrieve the steps for this countermeasure
+  OPTIONAL {
+    ?countermeasure mqto:steps ?stepList .
+    ?stepList mqto:first ?step .
+    # Note: Full list traversal would require recursive querying or property paths
+    ?step rdfs:label ?stepLabel .
+  }
+
+  # Optional: Find actual executions of this countermeasure
+  OPTIONAL {
+    ?execution a mqto:CountermeasureExecution ;
+               lis:implements ?countermeasure ;
+               mqto:startTime ?executionTime .
+
+    OPTIONAL {
+      ?execution mqto:rejected ?rejected .
+    }
+  }
+}
+ORDER BY ?cmLabel ?stepLabel

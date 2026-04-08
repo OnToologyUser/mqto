@@ -1,0 +1,28 @@
+# CQ-10: Which metrics triggered which failures?
+#
+# This query shows the actual layer causal chain: metric assessments that raised
+# failure occurrences, demonstrating the connection from quantitative data to
+# qualitative failure detection.
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lis: <http://rds.posccaesar.org/ontology/lis14/rdl/>
+
+SELECT ?metricAssessment ?metric ?metricLabel ?calculatedValue ?failureOccurrence ?failureType ?failureLabel ?viewTime
+WHERE {
+  # Find metric assessments that raised failures
+  ?metricAssessment a mqto:MetricAssessment ;
+                    lis:implements ?metric ;
+                    mqto:calculatedValue ?calculatedValue ;
+                    mqto:raised ?failureOccurrence .
+
+  ?metric rdfs:label ?metricLabel .
+
+  # Retrieve the failure occurrence details
+  ?failureOccurrence a mqto:FailureOccurrence ;
+                     lis:implements ?failureType ;
+                     mqto:viewTime ?viewTime .
+
+  ?failureType rdfs:label ?failureLabel .
+}
+ORDER BY DESC(?viewTime)

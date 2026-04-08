@@ -1,0 +1,42 @@
+# CQ-09: Which metrics have already been evaluated in a given context?
+#
+# This query identifies which metrics have been assessed for a specific item
+# or within a specific time range.
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lis: <http://rds.posccaesar.org/ontology/lis14/rdl/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?metric ?metricLabel ?latestAssessment ?latestTime
+WHERE {
+  # Bind the target item to investigate
+  BIND(<https://w3id.org/mqto/example#Process1234> AS ?targetItem)
+
+  # Find metric assessments for this item
+  ?assessment a mqto:MetricAssessment ;
+              mqto:calculatedFor ?targetItem ;
+              lis:implements ?metric ;
+              mqto:calculatedTime ?calculatedTime .
+
+  ?metric rdfs:label ?metricLabel .
+
+  # Optional: Apply time filter
+  # FILTER(?calculatedTime >= "2026-03-01T00:00:00"^^xsd:dateTime)
+
+  # Find the latest assessment for each metric
+  {
+    SELECT ?metric (MAX(?time) AS ?latestTime)
+    WHERE {
+      ?a a mqto:MetricAssessment ;
+         mqto:calculatedFor <https://w3id.org/mqto/example#Process1234> ;
+         lis:implements ?metric ;
+         mqto:calculatedTime ?time .
+    }
+    GROUP BY ?metric
+  }
+
+  FILTER(?calculatedTime = ?latestTime)
+  BIND(?assessment AS ?latestAssessment)
+}
+ORDER BY ?metricLabel

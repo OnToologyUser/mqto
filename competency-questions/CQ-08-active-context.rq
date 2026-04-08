@@ -1,0 +1,41 @@
+# CQ-08: Which processes and items were active in a given context?
+#
+# This query retrieves process executions and their participants (machines, materials)
+# within a specified time range or other context filters.
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lis: <http://rds.posccaesar.org/ontology/lis14/rdl/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?process ?processLabel ?startTime ?endTime ?participant ?participantLabel ?participantType
+WHERE {
+  # Find process executions
+  ?process a mqto:ProcessExecution ;
+           mqto:startTime ?startTime .
+
+  OPTIONAL {
+    ?process mqto:endTime ?endTime .
+  }
+
+  OPTIONAL {
+    ?process rdfs:label ?processLabel .
+  }
+
+  # Time filter: processes active in March 2026
+  FILTER(?startTime >= "2026-03-01T00:00:00"^^xsd:dateTime &&
+         ?startTime <= "2026-03-31T23:59:59"^^xsd:dateTime)
+
+  # Find participants in the process
+  OPTIONAL {
+    ?process lis:hasParticipant ?participant .
+    ?participant rdfs:label ?participantLabel .
+
+    # Determine participant type
+    OPTIONAL {
+      ?participant a ?participantType .
+      FILTER(?participantType IN (mqto:PhysicalMachine, mqto:MaterialChunk))
+    }
+  }
+}
+ORDER BY DESC(?startTime)

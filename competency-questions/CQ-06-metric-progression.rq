@@ -1,0 +1,33 @@
+# CQ-06: What is the temporal progression of a given metric? Which data was it based on?
+#
+# This query retrieves the time series of metric assessments and the underlying
+# observations they were calculated from.
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lis: <http://rds.posccaesar.org/ontology/lis14/rdl/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+
+SELECT ?assessment ?calculatedTime ?calculatedValue ?assessmentValue ?observation ?obsTime ?obsValue
+WHERE {
+  # Bind the target metric to investigate
+  BIND(<https://w3id.org/mqto/example#TemperatureDeviation> AS ?targetMetric)
+
+  # Find all assessments of this metric
+  ?assessment a mqto:MetricAssessment ;
+              lis:implements ?targetMetric ;
+              mqto:calculatedTime ?calculatedTime ;
+              mqto:calculatedValue ?calculatedValue .
+
+  OPTIONAL {
+    ?assessment mqto:assessmentValue ?assessmentValue .
+  }
+
+  # Retrieve underlying observations
+  OPTIONAL {
+    ?assessment mqto:basedOn ?observation .
+    ?observation sosa:resultTime ?obsTime ;
+                 sosa:hasSimpleResult ?obsValue .
+  }
+}
+ORDER BY DESC(?calculatedTime) ?obsTime

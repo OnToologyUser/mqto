@@ -1,0 +1,31 @@
+# CQ-04: Which failures occurred how often in a defined context?
+#
+# This query counts failure occurrences within a time range and optional context filters
+# (machine, material, process). Demonstrates the actual layer querying capability.
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX lis: <http://rds.posccaesar.org/ontology/lis14/rdl/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?failureType ?failureLabel (COUNT(?occurrence) AS ?count)
+WHERE {
+  ?occurrence a mqto:FailureOccurrence ;
+              lis:implements ?failureType ;
+              mqto:viewTime ?viewTime .
+
+  ?failureType rdfs:label ?failureLabel .
+
+  # Time filter: occurrences in the last 30 days
+  FILTER(?viewTime >= "2026-03-01T00:00:00"^^xsd:dateTime &&
+         ?viewTime <= "2026-03-31T23:59:59"^^xsd:dateTime)
+
+  # Optional: Filter by context (uncomment to use)
+  # OPTIONAL {
+  #   ?occurrence mqto:appearedOn ?item .
+  #   ?item a mqto:PhysicalMachine .
+  #   # Add additional filters: ?item lis:hasUID "Machine-4115"
+  # }
+}
+GROUP BY ?failureType ?failureLabel
+ORDER BY DESC(?count)

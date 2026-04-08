@@ -1,0 +1,38 @@
+# CQ-01: Which causes are responsible for a given failure, and with what probability?
+#
+# This query retrieves the causal chain for a given failure, showing which other failures
+# cause it and with what strength (weak, moderate, strong).
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?causeFailure ?causeLabel ?causalStrength
+WHERE {
+  # Bind the target failure to investigate
+  BIND(<https://w3id.org/mqto/example#Porosity> AS ?targetFailure)
+
+  # Find failures that cause the target failure
+  ?targetFailure mqto:causedBy ?causeFailure .
+  ?causeFailure rdfs:label ?causeLabel .
+
+  # Determine the causal strength
+  OPTIONAL {
+    ?targetFailure mqto:causedByWeakly ?weakCause .
+    FILTER(?causeFailure = ?weakCause)
+    BIND("weak" AS ?strength)
+  }
+  OPTIONAL {
+    ?targetFailure mqto:causedByModerately ?moderateCause .
+    FILTER(?causeFailure = ?moderateCause)
+    BIND("moderate" AS ?moderateStrength)
+  }
+  OPTIONAL {
+    ?targetFailure mqto:causedByStrongly ?strongCause .
+    FILTER(?causeFailure = ?strongCause)
+    BIND("strong" AS ?strongStrength)
+  }
+
+  # Select the most specific strength, defaulting to "unspecified" if none found
+  BIND(COALESCE(?strongStrength, ?moderateStrength, ?strength, "unspecified") AS ?causalStrength)
+}
+ORDER BY DESC(?causalStrength)

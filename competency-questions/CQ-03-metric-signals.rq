@@ -1,0 +1,28 @@
+# CQ-03: Which signals, data, etc., are associated with a given metric?
+#
+# This query retrieves the signals (data channels) that a metric reads from,
+# along with calculation details like time window and threshold bounds.
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?metric ?metricLabel ?signal ?signalLabel ?timeWindowSize ?lowerBound ?upperBound ?method
+WHERE {
+  # Bind the target metric to investigate
+  BIND(<https://w3id.org/mqto/example#TemperatureDeviation> AS ?metric)
+
+  ?metric a mqto:Metric ;
+          rdfs:label ?metricLabel .
+
+  # Find signals this metric reads from
+  OPTIONAL {
+    ?metric mqto:readsFrom ?signal .
+    ?signal rdfs:label ?signalLabel .
+  }
+
+  # Retrieve metric calculation parameters
+  OPTIONAL { ?metric mqto:timeWindowSize ?timeWindowSize }
+  OPTIONAL { ?metric mqto:lowerBound ?lowerBound }
+  OPTIONAL { ?metric mqto:upperBound ?upperBound }
+  OPTIONAL { ?metric mqto:method ?method }
+}

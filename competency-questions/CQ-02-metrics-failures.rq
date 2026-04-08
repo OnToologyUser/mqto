@@ -1,0 +1,17 @@
+# CQ-02: Which metrics and failures are related to each other?
+#
+# This query retrieves all relationships between metrics and failures,
+# showing which metrics are used to detect or characterize which failures.
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?failure ?failureLabel ?metric ?metricLabel
+WHERE {
+  ?failure a mqto:FailureMode ;
+           mqto:refersToMetric ?metric ;
+           rdfs:label ?failureLabel .
+
+  ?metric rdfs:label ?metricLabel .
+}
+ORDER BY ?failureLabel ?metricLabel

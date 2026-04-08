@@ -1,0 +1,45 @@
+# CQ-11: How is a metric calculated?
+#
+# This query retrieves the specification details of a metric: assessment method,
+# input signals, time window, and threshold bounds.
+
+PREFIX mqto: <https://w3id.org/mqto#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?metric ?metricLabel ?method ?signal ?signalLabel ?timeWindowSize ?lowerBound ?upperBound ?resultProperty
+WHERE {
+  # Bind the target metric to investigate
+  BIND(<https://w3id.org/mqto/example#TemperatureDeviation> AS ?metric)
+
+  ?metric a mqto:Metric ;
+          rdfs:label ?metricLabel .
+
+  # Assessment method (e.g., "mean", "max", "stdev")
+  OPTIONAL {
+    ?metric mqto:method ?method .
+  }
+
+  # Input signals
+  OPTIONAL {
+    ?metric mqto:readsFrom ?signal .
+    ?signal rdfs:label ?signalLabel .
+  }
+
+  # Time window for aggregation
+  OPTIONAL {
+    ?metric mqto:timeWindowSize ?timeWindowSize .
+  }
+
+  # Threshold bounds
+  OPTIONAL {
+    ?metric mqto:lowerBound ?lowerBound .
+  }
+  OPTIONAL {
+    ?metric mqto:upperBound ?upperBound .
+  }
+
+  # Result property extraction (which field to read from observations)
+  OPTIONAL {
+    ?metric mqto:resultProperty ?resultProperty .
+  }
+}
