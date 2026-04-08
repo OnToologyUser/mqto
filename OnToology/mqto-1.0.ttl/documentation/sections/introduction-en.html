@@ -1,3 +1,59 @@
 <h2 id="intro" class="list">Introduction <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
 <span class="markdown">
-This is a place holder text for the introduction. The introduction should briefly describe the ontology, its motivation, state of the art and goals.</span>
+
+## Motivation
+
+In modern manufacturing environments, quality troubleshooting requires integrating knowledge from three traditionally disconnected silos:
+- **Quality Management**: failure classifications, inspection protocols, and root cause categories
+- **Production Context**: machine configurations, material batches, and process parameters
+- **Data Infrastructure**: sensor observations, PLC signals, and time-series data
+
+MQTO addresses this integration challenge by providing a **connector ontology** that bridges these domains through a shared semantic framework. The key innovation is the use of **metrics and KPIs as semantic bridges** between quantitative sensor data and qualitative quality events, enabling automated root cause analysis and countermeasure recommendation.
+
+## Background and State of the Art
+
+Existing ontologies provide foundational patterns but lack integration:
+- **LIS (Lifecycle Information System)** [[1]](#ref1) establishes the Specified/Actual pattern for separating schema-level definitions from instance-level data
+- **SOSA/SSN (Sensor, Observation, Sample, Actuator / Semantic Sensor Network)** [[2]](#ref2) models observations and sensor data but doesn't connect to quality management
+- **PKO (Procedural Knowledge Ontology)** [[3]](#ref3) represents procedures and their execution but lacks manufacturing-specific root cause structures
+
+MQTO builds upon these standards while adding manufacturing quality troubleshooting semantics.
+
+## Goals and Scope
+
+MQTO is designed as a **domain-independent connector ontology** applicable across manufacturing processes (die-casting, injection molding, machining, assembly, etc.) with the following goals:
+
+1. **Structured Root Cause Analysis**: Implement Ishikawa (fishbone) diagram semantics with Machine, Material, and Method categories
+2. **Specified/Actual Layering**: Separate reusable knowledge (failure types, metrics, procedures) from runtime data (observations, occurrences, executions)
+3. **Observation Integration**: Bridge abstract metrics to concrete sensor data through Signal entities as data channels
+4. **Procedural Countermeasures**: Model remediation procedures with externalized step ordering for reusability across different contexts
+
+**Intentional scope decisions:**
+- Focus on three M's (Machine, Material, Method) aligned with LIS/IDO scope, not the full six M's (Man, Measurement, Mother Nature)
+- Use ordinal probability categories (weak/moderate/strong) rather than numeric probabilities for practical applicability
+- Provide ranking weights but leave ranking algorithms to external systems
+- Remain unit-agnostic, allowing downstream ontologies to adopt QUDT, OM, or domain-specific unit standards
+
+## Architecture Overview
+
+MQTO follows a **two-layer architecture**:
+
+**Specified Layer** (schema-level, reusable knowledge):
+- `IshikawaItem` → `Failure` → `Metric` → `Signal` (data channel)
+- `Countermeasure` → `CountermeasureStep` (with externalized `List` ordering)
+
+**Actual Layer** (instance-level, runtime data):
+- `ActualIshikawaItem` → `FailureOccurrence` → `MetricAssessment` → `Observation` (SOSA)
+- `CountermeasureExecution` → `CountermeasureStepExecution` (PROV)
+
+The **Signal concept** is central: it represents a specific data channel (PLC variable, sensor reading, control signal) that bridges the specified layer (Metric calculations read from Signals) and the actual layer (Observations measure ObservableProperties).
+
+## Use Case
+
+MQTO has been validated in an aluminum die-casting quality troubleshooting system at TCG UNITECH GmbH, where it integrates:
+- Quality inspection results (surface defects, dimensional measurements)
+- Process sensor data (temperature, pressure, cycle time)
+- Root cause analysis linking failures to machine parameters, material properties, and process methods
+- Countermeasure recommendation based on historical effectiveness
+
+</span>
