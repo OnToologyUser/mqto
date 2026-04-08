@@ -1,0 +1,16 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX mqto: <https://w3id.org/mqto#>
+
+SELECT ?entity ?type WHERE {
+  ?entity a ?type .
+  FILTER(?type IN (owl:Class, owl:ObjectProperty, owl:DatatypeProperty))
+  FILTER(STRSTARTS(STR(?entity), "https://w3id.org/mqto#"))
+  FILTER NOT EXISTS {
+    { ?entity rdfs:comment ?comment }
+    UNION
+    { ?entity skos:definition ?def }
+  }
+}
+ORDER BY ?type ?entity
