@@ -1,7 +1,7 @@
 <h2 id="intro" class="list">Introduction <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
 <span class="markdown">
 
-## Motivation
+### Motivation
 
 In modern manufacturing environments, quality troubleshooting requires integrating knowledge from three traditionally disconnected silos:
 - **Quality Management**: failure classifications, inspection protocols, and root cause categories
@@ -10,7 +10,7 @@ In modern manufacturing environments, quality troubleshooting requires integrati
 
 MQTO addresses this integration challenge by providing a **connector ontology** that bridges these domains through a shared semantic framework. The key innovation is the use of **metrics and KPIs as semantic bridges** between quantitative sensor data and qualitative quality events, enabling automated root cause analysis and countermeasure recommendation.
 
-## Background and State of the Art
+### Background and State of the Art
 
 Existing ontologies provide foundational patterns but lack integration:
 - **LIS (Lifecycle Information System)** [[1]](#ref1) establishes the Specified/Actual pattern for separating schema-level definitions from instance-level data
@@ -19,7 +19,7 @@ Existing ontologies provide foundational patterns but lack integration:
 
 MQTO builds upon these standards while adding manufacturing quality troubleshooting semantics.
 
-## Goals and Scope
+### Goals and Scope
 
 MQTO is designed as a **domain-independent connector ontology** applicable across manufacturing processes (die-casting, injection molding, machining, assembly, etc.) with the following goals:
 
@@ -34,7 +34,7 @@ MQTO is designed as a **domain-independent connector ontology** applicable acros
 - Provide ranking weights but leave ranking algorithms to external systems
 - Remain unit-agnostic, allowing downstream ontologies to adopt QUDT, OM, or domain-specific unit standards
 
-## Architecture Overview
+### Architecture Overview
 
 MQTO follows a **two-layer architecture**:
 
@@ -48,7 +48,7 @@ MQTO follows a **two-layer architecture**:
 
 The **Signal concept** is central: it represents a specific data channel (PLC variable, sensor reading, control signal) that bridges the specified layer (Metric calculations read from Signals) and the actual layer (Observations measure ObservableProperties).
 
-## Use Case
+### Use Case
 
 MQTO has been validated in an aluminum die-casting quality troubleshooting system at TCG UNITECH GmbH, where it integrates:
 - Quality inspection results (surface defects, dimensional measurements)
