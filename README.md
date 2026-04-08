@@ -54,6 +54,26 @@ MQTO occupies the middle layer in a three-layer architecture:
 2. Open in Protégé 5.5+
 3. Import as: `https://w3id.org/mqto#`
 
+### Validation
+
+**Tools required:** Apache Jena (for SPARQL), pyshacl (optional)
+
+```bash
+# Syntax validation
+rapper -i turtle -o ntriples mqto-1.0.ttl > /dev/null
+
+# Check for missing labels
+sparql --data=mqto-1.0.ttl --query=check-labels.rq
+
+# Check for missing definitions
+sparql --data=mqto-1.0.ttl --query=check-definitions.rq
+
+# SHACL validation (if shapes defined)
+pyshacl -s shapes.ttl -df turtle mqto-1.0.ttl
+```
+
+**Validation queries** are available in the repository for checking ontology completeness.
+
 ## License
 
 Apache License 2.0 (or specify your preferred license)
