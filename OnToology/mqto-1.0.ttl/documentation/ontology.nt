@@ -86,6 +86,8 @@
 # https://w3id.org/mqto#baseFor
 <https://w3id.org/mqto#baseFor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
 <https://w3id.org/mqto#baseFor> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/mqto#basedOn> .
+<https://w3id.org/mqto#baseFor> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/mqto#Observation> .
+<https://w3id.org/mqto#baseFor> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/mqto#MetricAssessment> .
 <https://w3id.org/mqto#baseFor> <http://www.w3.org/2000/01/rdf-schema#comment> "Indicates that an Observation serves as the data foundation for a MetricAssessment calculation. Inverse of basedOn. Enables tracing from raw sensor data to computed metrics."@en .
 <https://w3id.org/mqto#baseFor> <http://www.w3.org/2000/01/rdf-schema#label> "base for"@en .
 # 
