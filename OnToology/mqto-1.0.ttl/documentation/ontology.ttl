@@ -95,6 +95,8 @@
 ###  https://w3id.org/mqto#baseFor
 :baseFor rdf:type owl:ObjectProperty ;
          owl:inverseOf :basedOn ;
+         rdfs:domain :Observation ;
+         rdfs:range :MetricAssessment ;
          rdfs:comment "Indicates that an Observation serves as the data foundation for a MetricAssessment calculation. Inverse of basedOn. Enables tracing from raw sensor data to computed metrics."@en ;
          rdfs:label "base for"@en .
 
