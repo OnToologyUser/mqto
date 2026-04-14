@@ -549,6 +549,15 @@
     "@value" : "Florian Rötzer"
   } ]
 }, {
+  "@id" : "https://orcid.org/0000-0003-3445-0504",
+  "@type" : [ "http://www.w3.org/2002/07/owl#NamedIndividual", "http://xmlns.com/foaf/0.1/Person" ],
+  "http://xmlns.com/foaf/0.1/name" : [ {
+    "@value" : "Erwin Filtz"
+  } ],
+  "https://schema.org/affiliation" : [ {
+    "@id" : "https://www.siemens.at/"
+  } ]
+}, {
   "@id" : "https://schema.org/affiliation",
   "@type" : [ "http://www.w3.org/2002/07/owl#AnnotationProperty" ]
 }, {
