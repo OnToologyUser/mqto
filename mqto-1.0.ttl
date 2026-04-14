@@ -992,11 +992,15 @@ mqto:Signal rdf:type owl:Class ;
                                                  foaf:Person ;
                                         foaf:name "Florian Rötzer" .
 
-<https://orcid.org/0000-0002-3050-159X> foaf:name "Josiane Xavier Parreira" ;
+<https://orcid.org/0000-0002-3050-159X> rdf:type owl:NamedIndividual ,
+                                                 foaf:Person ;
+                                        foaf:name "Josiane Xavier Parreira" ;
                                         <https://schema.org/affiliation> <https://www.siemens.at/> .
 
 
-<https://orcid.org/0000-0003-3445-0504> foaf:name "Erwin Filtz" ;
+<https://orcid.org/0000-0003-3445-0504> rdf:type owl:NamedIndividual ,
+                                                 foaf:Person ;
+                                        foaf:name "Erwin Filtz" ;
                                         <https://schema.org/affiliation> <https://www.siemens.at/> .
 
 

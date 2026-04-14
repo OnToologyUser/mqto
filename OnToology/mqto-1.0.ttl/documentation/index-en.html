@@ -2,15 +2,22 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
- <link rel="stylesheet" href="resources/primer.css" media="screen" />   
- <link rel="stylesheet" href="resources/rec.css" media="screen" />   
- <link rel="stylesheet" href="resources/extra.css" media="screen" />   
- <link rel="stylesheet" href="resources/owl.css" media="screen" />   
+<link rel="stylesheet" href="resources/primer.css" media="screen"/>
+<link rel="stylesheet" href="resources/rec.css" media="screen"/>
+<link rel="stylesheet" href="resources/extra.css" media="screen"/>
+<link rel="stylesheet" href="resources/owl.css" media="screen"/>
+<link rel="stylesheet" href="resources/dark.css" media="(prefers-color-scheme: dark)"/>
+<link rel="stylesheet" href="resources/light.css" media="(prefers-color-scheme: light)"/>
+<link rel="stylesheet" href="resources/slider.css" media="screen"/>
+<meta name="color-scheme" content="dark light">
+<script type="module" src="resources/dark-mode-toggle.mjs"></script><div class="darkmode">
+	<dark-mode-toggle class="slider"></dark-mode-toggle>
+</div>
 <link rel="icon" type="image/png" href="resources/rdf.icon"/> <title>Manufacturing Quality Troubleshooting Ontology</title>
 
 
 <!-- SCHEMA.ORG METADATA -->
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","url":"https://w3id.org/mqto#","image":"http://vowl.visualdataweb.org/webvowl/#iri=https://w3id.org/mqto#","name":"Manufacturing Quality Troubleshooting Ontology", "headline":"The Manufacturing Quality Troubleshooting Ontology (MQTO) provides a domain-independent semantic framework for modeling manufacturing quality inspection, failure diagnosis, and countermeasure recommendation. Building on the LIS (Lifecycle Information System) specified/actual pattern and integrating SOSA/SSN observation semantics, MQTO enables structured representation of Ishikawa (fishbone) root cause analysis across Machine, Material, and Method categories. The ontology supports both schema-level knowledge (failure types, metrics, countermeasure procedures) and instance-level data (actual observations, failure occurrences, executed remediation steps), making it applicable across diverse manufacturing domains including die-casting, injection molding, machining, and assembly processes.", "dateReleased":"2026-03-17", "version":"1.0.0", "license":"http://www.apache.org/licenses/LICENSE-2.0", "author":[{"@type":"Person","name":"Stefan Bischof","url":"https://orcid.org/0000-0001-9521-8907"}], "contributor":[{"@type":"Person","name":"Florian Rötzer","url":"https://orcid.org/0000-0003-2661-5575"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","url":"https://w3id.org/mqto#","image":"http://vowl.visualdataweb.org/webvowl/#iri=https://w3id.org/mqto#","name":"Manufacturing Quality Troubleshooting Ontology", "headline":"The Manufacturing Quality Troubleshooting Ontology (MQTO) provides a domain-independent semantic framework for modeling manufacturing quality inspection, failure diagnosis, and countermeasure recommendation. Building on the LIS (Lifecycle Information System) specified/actual pattern and integrating SOSA/SSN observation semantics, MQTO enables structured representation of Ishikawa (fishbone) root cause analysis across five categories: Machine, Manpower, Material, Measurement, and Method. The ontology supports both schema-level knowledge (failure types, metrics, countermeasure procedures) and instance-level data (actual observations, failure occurrences, executed remediation steps), making it applicable across diverse manufacturing domains including die-casting, injection molding, machining, and assembly processes.", "dateReleased":"2026-03-17", "dateModified":"2026-04-14", "version":"1.0.0", "license":"http://www.apache.org/licenses/LICENSE-2.0", "author":[{"@type":"Person","name":"Stefan Bischof","url":"https://orcid.org/0000-0001-9521-8907"}], "contributor":[{"@type":"Person","name":"Florian Rötzer","url":"https://orcid.org/0000-0003-2661-5575"},{"@type":"Person","name":"Josiane Xavier Parreira","url":"https://orcid.org/0000-0002-3050-159X"},{"@type":"Person","name":"Erwin Filtz","url":"https://orcid.org/0000-0003-3445-0504"}]}</script>
 
 <script src="resources/jquery.js"></script> 
 <script src="resources/marked.min.js"></script> 
@@ -70,26 +77,35 @@ function loadTOC(){
 
 
 <dl>
+<dt>Modified on: 2026-04-14</dt>
 <dt>This version:</dt>
 <dd><a href="https://w3id.org/mqto/1.0">https://w3id.org/mqto/1.0</a></dd>
+<dt>Latest version:</dt>
+<dd><a href="https://w3id.org/mqto">https://w3id.org/mqto</a></dd>
 <dt>Revision:</dt>
 <dd>1.0.0</dd>
+<dt>Issued on:</dt>
+<dd>Date issued</dd>
 <dt>Authors:</dt>
-<dd><a href="https://orcid.org/0000-0001-9521-8907">Stefan Bischof</a></dd>
+<dd><a href="https://orcid.org/0000-0001-9521-8907">Stefan Bischof</a>, <a href="https://www.siemens.at/">Siemens AG Österreich</a></dd>
 
 <dt>Contributors:</dt>
-<dd><a href="https://orcid.org/0000-0003-2661-5575">Florian Rötzer</a></dd>
+<dd><a href="https://orcid.org/0000-0003-2661-5575">Florian Rötzer</a></dd><dd><a href="https://orcid.org/0000-0002-3050-159X">Josiane Xavier Parreira</a>, Siemens AG Österreich</dd><dd><a href="https://orcid.org/0000-0003-3445-0504">Erwin Filtz</a>, Siemens AG Österreich</dd>
 
 <dt>Publisher:</dt>
 <dd><a href="https://github.com/dg-assist">https://github.com/dg-assist</a></dd>
-<dt>See also:</dt>
-<dd><a href="http://purl.org/net/p-plan">http://purl.org/net/p-plan</a></dd><dd><a href="https://w3id.org/pko/1.0.0">https://w3id.org/pko/1.0.0</a></dd>
+<dt>Imported Ontologies:</dt>
+<dd><a href="http://rds.posccaesar.org/ontology/lis14/ont/ido-ssn/0.1">IDO-SSN (LIS/SOSA/SSN Integration Module)</a></dd><dd><a href="https://w3id.org/pko/1.0.0">Procedural Knowledge Ontology (PKO)</a></dd>
 
 <dt>Funding:</dt>
 <dd><a href="https://projekte.ffg.at/projekt/4641766">https://projekte.ffg.at/projekt/4641766</a></dd>
 
-<dt>Download serialization:</dt><dd><span><a href="ontology.jsonld" target="_blank"><img src="https://img.shields.io/badge/Format-JSON_LD-blue.svg" alt="JSON-LD" /></a> </span><span><a href="ontology.owl" target="_blank"><img src="https://img.shields.io/badge/Format-RDF/XML-blue.svg" alt="RDF/XML" /></a> </span><span><a href="ontology.nt" target="_blank"><img src="https://img.shields.io/badge/Format-N_Triples-blue.svg" alt="N-Triples" /></a> </span><span><a href="ontology.ttl" target="_blank"><img src="https://img.shields.io/badge/Format-TTL-blue.svg" alt="TTL" /></a> </span></dd><dt>License:</dt><dd><a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank"><img src="https://img.shields.io/badge/License-http://www.apache.org/licenses/LICENSE_2.0-blue.svg" alt="http://www.apache.org/licenses/LICENSE-2.0" /></a>
-</dd><!-- <dt>Evaluation:</dt><dd><a href="OOPSevaluation/oopsEval.html#" target="_blank"><img src="https://img.shields.io/badge/Evaluate_with-OOPS! (OntOlogy Pitfall Scanner!)-blue.svg" alt="Evaluate with OOPS!" /></a></dd> --><dt>Cite as:</dt>
+<dt>Download serialization:</dt><dd><span><a href="ontology.jsonld" target="_blank"><img src="https://img.shields.io/badge/Format-JSON_LD-blue.svg" alt="JSON-LD" /></a> </span><span><a href="ontology.owl" target="_blank"><img src="https://img.shields.io/badge/Format-RDF/XML-blue.svg" alt="RDF/XML" /></a> </span><span><a href="ontology.nt" target="_blank"><img src="https://img.shields.io/badge/Format-N_Triples-blue.svg" alt="N-Triples" /></a> </span><span><a href="ontology.ttl" target="_blank"><img src="https://img.shields.io/badge/Format-TTL-blue.svg" alt="TTL" /></a> </span></dd><dt>License:</dt><dd><a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank"><img src="https://img.shields.io/badge/License-Apache%20License,%20Version%202.0-blue.svg" alt="http://www.apache.org/licenses/LICENSE-2.0" /></a>
+<a href="http://www.apache.org/licenses/LICENSE-2.0" rel="license" target="_blank">
+<img src="null" style="border-width:0" alt="License" />
+</a>
+<br/></dd><dt>Visualization:</dt><dd><a href="webvowl/index.html#" target="_blank"><img src="https://img.shields.io/badge/Visualize_with-WebVowl-blue.svg" alt="Visualize with WebVowl" /></a></dd>
+<!-- <dt>Evaluation:</dt><dd><a href="OOPSevaluation/oopsEval.html#" target="_blank"><img src="https://img.shields.io/badge/Evaluate_with-OOPS! (OntOlogy Pitfall Scanner!)-blue.svg" alt="Evaluate with OOPS!" /></a></dd> --><dt>Cite as:</dt>
 <dd>Stefan Bischof. Manufacturing Quality Troubleshooting Ontology. Revision: 1.0.0. Retrieved from: https://w3id.org/mqto/1.0</dd>
 </dl>
 
@@ -109,7 +125,8 @@ function loadTOC(){
 <div id="acknowledgments">
 <h2 id="ack" class="list">Acknowledgments <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
 <p>
-The authors would like to thank <a href="http://www.essepuntato.it/">Silvio Peroni</a> for developing <a href="http://www.essepuntato.it/lode">LODE</a>, a Live OWL Documentation Environment, which is used for representing the Cross Referencing Section of this document and <a href="https://w3id.org/people/dgarijo">Daniel Garijo</a> for developing <a href="https://github.com/dgarijo/Widoco">Widoco</a>, the program used to create the template used in this documentation. We also thank <a href="https://github.com/OnToology/OnToology">OnToology</a>, the automated ontology documentation system that generates and publishes this documentation directly from the GitHub repository.</p>
+The authors would like to thank <a href="http://www.essepuntato.it/">Silvio Peroni</a> for developing <a href="http://www.essepuntato.it/lode">LODE</a>, a Live OWL Documentation Environment, which is used for representing the Cross Referencing Section of this document and <a href="https://w3id.org/people/dgarijo">Daniel Garijo</a> for developing <a href="https://github.com/dgarijo/Widoco">Widoco</a>, the program used to create the template used in this documentation.</p>
+We also thank <a href="https://github.com/OnToology/OnToology">OnToology</a>, the automated ontology documentation system that generates and publishes this documentation directly from the GitHub repository.</p>
 
 <h3>Funding Acknowledgment</h3>
 <p>

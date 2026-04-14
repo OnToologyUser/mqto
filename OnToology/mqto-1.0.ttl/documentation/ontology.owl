@@ -31,6 +31,7 @@
         <terms:creator rdf:resource="https://orcid.org/0000-0001-9521-8907"/>
         <terms:description xml:lang="en">A generalised ontology for manufacturing quality troubleshooting, applicable across different manufacturing domains. Covers both the specified (schema-level) and actual (instance-level) layers of a manufacturing process, with a focus on root cause analysis, failure diagnosis, and countermeasure recommendation.</terms:description>
         <terms:license rdf:resource="http://www.apache.org/licenses/LICENSE-2.0"/>
+        <terms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-14</terms:modified>
         <terms:publisher rdf:resource="https://github.com/dg-assist"/>
         <terms:rights xml:lang="en">Copyright 2026 DG Assist. Licensed under the Apache License, Version 2.0.</terms:rights>
         <terms:subject xml:lang="en">Industry 4.0</terms:subject>
@@ -1558,12 +1559,34 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
     
 
 
+    <!-- https://orcid.org/0000-0002-3050-159X -->
+
+
+    <owl:NamedIndividual rdf:about="https://orcid.org/0000-0002-3050-159X">
+        <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+        <foaf:name>Josiane Xavier Parreira</foaf:name>
+        <schema1:affiliation rdf:resource="https://www.siemens.at/"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- https://orcid.org/0000-0003-2661-5575 -->
 
 
     <owl:NamedIndividual rdf:about="https://orcid.org/0000-0003-2661-5575">
         <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
         <foaf:name>Florian Rötzer</foaf:name>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://orcid.org/0000-0003-3445-0504 -->
+
+
+    <owl:NamedIndividual rdf:about="https://orcid.org/0000-0003-3445-0504">
+        <rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+        <foaf:name>Erwin Filtz</foaf:name>
+        <schema1:affiliation rdf:resource="https://www.siemens.at/"/>
     </owl:NamedIndividual>
     
 

@@ -23,13 +23,13 @@ MQTO builds upon these standards while adding manufacturing quality troubleshoot
 
 MQTO is designed as a **domain-independent connector ontology** applicable across manufacturing processes (die-casting, injection molding, machining, assembly, etc.) with the following goals:
 
-1. **Structured Root Cause Analysis**: Implement Ishikawa (fishbone) diagram semantics with Machine, Material, and Method categories
+1. **Structured Root Cause Analysis**: Implement Ishikawa (fishbone) diagram semantics with the 5M categories (Machine, Manpower, Material, Measurement, Method)
 2. **Specified/Actual Layering**: Separate reusable knowledge (failure types, metrics, procedures) from runtime data (observations, occurrences, executions)
 3. **Observation Integration**: Bridge abstract metrics to concrete sensor data through Signal entities as data channels
 4. **Procedural Countermeasures**: Model remediation procedures with externalized step ordering for reusability across different contexts
 
 **Intentional scope decisions:**
-- Focus on three M's (Machine, Material, Method) aligned with LIS/IDO scope, not the full six M's (Man, Measurement, Mother Nature)
+- Support five M's (Machine, Manpower, Material, Measurement, Method); actual-layer representations for Manpower and Measurement are delegated to domain ontologies
 - Use ordinal probability categories (weak/moderate/strong) rather than numeric probabilities for practical applicability
 - Provide ranking weights but leave ranking algorithms to external systems
 - Remain unit-agnostic, allowing downstream ontologies to adopt QUDT, OM, or domain-specific unit standards
@@ -39,7 +39,7 @@ MQTO is designed as a **domain-independent connector ontology** applicable acros
 MQTO follows a **two-layer architecture**:
 
 **Specified Layer** (schema-level, reusable knowledge):
-- `IshikawaItem` → `Failure` → `Metric` → `Signal` (data channel)
+- `IshikawaItem` → `FailureMode` → `Metric` → `Signal` (data channel)
 - `Countermeasure` → `CountermeasureStep` (with externalized `List` ordering)
 
 **Actual Layer** (instance-level, runtime data):
