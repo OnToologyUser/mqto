@@ -12,6 +12,9 @@ This section provides details for each class and property defined by Manufacturi
          <a href="#ActualIshikawaItem" title="https://w3id.org/mqto#ActualIshikawaItem">Actual Ishikawa Item</a>
       </li>
       <li>
+         <a href="#Actuation" title="https://w3id.org/mqto#Actuation">Actuation</a>
+      </li>
+      <li>
          <a href="#Countermeasure" title="https://w3id.org/mqto#Countermeasure">Countermeasure</a>
       </li>
       <li>
@@ -23,6 +26,9 @@ This section provides details for each class and property defined by Manufacturi
       <li>
          <a href="#CountermeasureStepExecution"
             title="https://w3id.org/mqto#CountermeasureStepExecution">Countermeasure Step Execution</a>
+      </li>
+      <li>
+         <a href="#DataEvent" title="https://w3id.org/mqto#DataEvent">Data Event</a>
       </li>
       <li>
          <a href="#FailureMode" title="https://w3id.org/mqto#FailureMode">Failure Mode</a>
@@ -111,7 +117,7 @@ This section provides details for each class and property defined by Manufacturi
       <p>
          <strong>IRI:</strong> https://w3id.org/mqto#ActualIshikawaItem</p>
       <div class="comment">
-         <span class="markdown">Abstract superclass for actual/instance layer counterparts of IshikawaItem. Integrates SOSA: each ActualIshikawaItem is a FeatureOfInterest that can be observed, has ObservableProperties, and can have FailureOccurrences. MQTO defines three concrete subclasses: PhysicalMachine (implements Machine), PhysicalMaterial (implements Material), and ProcessExecution (implements Method). Actual-layer counterparts for Manpower and Measurement are not defined in MQTO; domain-specific ontologies are expected to provide them.</span>
+         <span class="markdown">Abstract superclass for actual/instance layer counterparts of IshikawaItem. Integrates SOSA: each ActualIshikawaItem is a FeatureOfInterest whose observations, properties, and failure occurrences are constrained at the subclass level. MQTO defines three concrete subclasses: PhysicalMachine (implements Machine), PhysicalMaterial (implements Material), and ProcessExecution (implements Method). Actual-layer counterparts for Manpower and Measurement are not defined in MQTO; domain-specific ontologies are expected to provide them.</span>
       </div>
       <dl class="description">
          <dt>has super-classes</dt>
@@ -134,6 +140,26 @@ This section provides details for each class and property defined by Manufacturi
             <a href="#appearedOn" title="https://w3id.org/mqto#appearedOn">appeared on</a>
             <sup class="type-op" title="object property">op</sup>, <a href="#calculatedFor" title="https://w3id.org/mqto#calculatedFor">calculated for</a>
             <sup class="type-op" title="object property">op</sup>
+         </dd>
+      </dl>
+   </div>
+   <div class="entity" id="Actuation">
+      <h3>Actuation<sup class="type-c" title="class">c</sup>
+         <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a>
+         </span>
+      </h3>
+      <p>
+         <strong>IRI:</strong> https://w3id.org/mqto#Actuation</p>
+      <div class="comment">
+         <span class="markdown">Subclass of sosa:Actuation, representing a single actuation event that changes the state of an ActuatableProperty of an ActualIshikawaItem. As a subclass of mqto:DataEvent, actuation events can serve as the basis for MetricAssessments alongside Observations.</span>
+      </div>
+      <dl class="description">
+         <dt>has super-classes</dt>
+         <dd>
+            <a href="#DataEvent" title="https://w3id.org/mqto#DataEvent">Data Event</a>
+            <sup class="type-c" title="class">c</sup>, <a href="http://www.w3.org/ns/sosa/Actuation"
+               target="_blank"
+               title="http://www.w3.org/ns/sosa/Actuation">actuation</a>
          </dd>
       </dl>
    </div>
@@ -160,8 +186,8 @@ This section provides details for each class and property defined by Manufacturi
          </dd>
          <dt>is in domain of</dt>
          <dd>
-            <a href="#mitigates" title="https://w3id.org/mqto#mitigates">mitigates</a>
-            <sup class="type-op" title="object property">op</sup>, <a href="#steps" title="https://w3id.org/mqto#steps">steps</a>
+            <a href="#hasStepList" title="https://w3id.org/mqto#hasStepList">has step list</a>
+            <sup class="type-op" title="object property">op</sup>, <a href="#mitigates" title="https://w3id.org/mqto#mitigates">mitigates</a>
             <sup class="type-op" title="object property">op</sup>
          </dd>
          <dt>is in range of</dt>
@@ -179,7 +205,7 @@ This section provides details for each class and property defined by Manufacturi
       <p>
          <strong>IRI:</strong> https://w3id.org/mqto#CountermeasureExecution</p>
       <div class="comment">
-         <span class="markdown">The actual execution of a Countermeasure procedure, performed to mitigate one or more FailureOccurrences. As a subclass of both lis:Activity and lis:Actual, it is a concrete temporal event that implements a Countermeasure specification. Links to the Countermeasure via lis:implements, records mitigated FailureOccurrences via mqto:mitigated, and tracks constituent steps via mqto:hasStep. Participants (machines, materials, or personnel) are not constrained at the MQTO level; the participant restriction is carried by the Countermeasure specification, and domain-specific ontologies may further restrict or extend participation. As a subclass of pko:ProcedureExecution, countermeasure executions align with PKO's procedure execution model.</span>
+         <span class="markdown">The actual execution of a Countermeasure procedure, performed to mitigate one or more FailureOccurrences. As a subclass of both lis:Activity and lis:Actual, it is a concrete temporal event that implements a Countermeasure specification. Links to the Countermeasure via lis:implements, records mitigated FailureOccurrences via mqto:mitigated, and tracks constituent steps via pko:includesStepExecution. Step sequencing uses pko:nextStepExecution and pko:previousStepExecution inherited from pko:ProcedureExecution. As a subclass of pko:ProcedureExecution, countermeasure executions align with PKO's procedure execution model.</span>
       </div>
       <dl class="description">
          <dt>has super-classes</dt>
@@ -194,8 +220,7 @@ This section provides details for each class and property defined by Manufacturi
          </dd>
          <dt>is in domain of</dt>
          <dd>
-            <a href="#hasFirstStep" title="https://w3id.org/mqto#hasFirstStep">has first step</a>
-            <sup class="type-op" title="object property">op</sup>, <a href="#mitigated" title="https://w3id.org/mqto#mitigated">mitigated</a>
+            <a href="#mitigated" title="https://w3id.org/mqto#mitigated">mitigated</a>
             <sup class="type-op" title="object property">op</sup>, <a href="#reasoningLine" title="https://w3id.org/mqto#reasoningLine">reasoning line</a>
             <sup class="type-dp" title="data property">dp</sup>, <a href="#score" title="https://w3id.org/mqto#score">score</a>
             <sup class="type-dp" title="data property">dp</sup>, <a href="#suggestedBy" title="https://w3id.org/mqto#suggestedBy">suggested by</a>
@@ -249,7 +274,7 @@ This section provides details for each class and property defined by Manufacturi
       <p>
          <strong>IRI:</strong> https://w3id.org/mqto#CountermeasureStepExecution</p>
       <div class="comment">
-         <span class="markdown">The actual, single execution of one CountermeasureStep. Each execution implements a specific CountermeasureStep from the specified layer via lis:implements, performed in a concrete, non-reused linear order encoded via mqto:hasFirstStep / mqto:hasNextStep, contrasting with the specified layer where mqto:List enables step reuse across procedures. As a subclass of both lis:Activity and lis:Actual, it is a concrete temporal activity. As a subclass of pko:StepExecution, countermeasure step executions align with PKO's step execution model.</span>
+         <span class="markdown">The actual, single execution of one CountermeasureStep. Each execution implements a specific CountermeasureStep from the specified layer via lis:implements. Step sequencing uses pko:nextStepExecution and pko:previousStepExecution from PKO, contrasting with the specified layer where mqto:List enables step reuse across procedures. As a subclass of both lis:Activity and lis:Actual, it is a concrete temporal activity. As a subclass of pko:StepExecution, countermeasure step executions align with PKO's step execution model.</span>
       </div>
       <dl class="description">
          <dt>has super-classes</dt>
@@ -265,14 +290,35 @@ This section provides details for each class and property defined by Manufacturi
          <dt>is in domain of</dt>
          <dd>
             <a href="#completionTime" title="https://w3id.org/mqto#completionTime">completion time</a>
-            <sup class="type-dp" title="data property">dp</sup>, <a href="#hasNextStep" title="https://w3id.org/mqto#hasNextStep">has next step</a>
+            <sup class="type-dp" title="data property">dp</sup>
+         </dd>
+      </dl>
+   </div>
+   <div class="entity" id="DataEvent">
+      <h3>Data Event<sup class="type-c" title="class">c</sup>
+         <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#classes">Class ToC</a>
+         </span>
+      </h3>
+      <p>
+         <strong>IRI:</strong> https://w3id.org/mqto#DataEvent</p>
+      <div class="comment">
+         <span class="markdown">Common superclass of mqto:Observation and mqto:Actuation. Provides a named type for the range of mqto:basedOn, allowing MetricAssessments to be grounded in either sensor observations or actuation events. Mirrors the mqto:Property pattern which bridges ObservableProperty and ActuableProperty.</span>
+      </div>
+      <dl class="description">
+         <dt>has sub-classes</dt>
+         <dd>
+            <a href="#Actuation" title="https://w3id.org/mqto#Actuation">Actuation</a>
+            <sup class="type-c" title="class">c</sup>, <a href="#Observation" title="https://w3id.org/mqto#Observation">Observation</a>
+            <sup class="type-c" title="class">c</sup>
+         </dd>
+         <dt>is in domain of</dt>
+         <dd>
+            <a href="#baseFor" title="https://w3id.org/mqto#baseFor">base for</a>
             <sup class="type-op" title="object property">op</sup>
          </dd>
          <dt>is in range of</dt>
          <dd>
-            <a href="#hasFirstStep" title="https://w3id.org/mqto#hasFirstStep">has first step</a>
-            <sup class="type-op" title="object property">op</sup>, <a href="#hasNextStep" title="https://w3id.org/mqto#hasNextStep">has next step</a>
-            <sup class="type-op" title="object property">op</sup>, <a href="#hasStep" title="https://w3id.org/mqto#hasStep">has step</a>
+            <a href="#basedOn" title="https://w3id.org/mqto#basedOn">based on</a>
             <sup class="type-op" title="object property">op</sup>
          </dd>
       </dl>
@@ -322,14 +368,12 @@ This section provides details for each class and property defined by Manufacturi
       <p>
          <strong>IRI:</strong> https://w3id.org/mqto#FailureOccurrence</p>
       <div class="comment">
-         <span class="markdown">An instance-layer temporal event representing a specific quality defect or operational problem detected during production. As a subclass of both lis:Activity and lis:Actual, it is a concrete occurrence in time. Implements a Failure Mode specification, appears on an ActualIshikawaItem, and is raised by one or more MetricAssessments that detected threshold violations. Can be mitigated by CountermeasureExecutions. The timestamp of the occurrence is recorded via mqto:occurrenceTime.</span>
+         <span class="markdown">An instance-layer entity representing a specific quality defect or operational problem detected during production. As a subclass of lis:Actual, it is a concrete instance-level entity that implements a FailureMode specification. Appears on an ActualIshikawaItem, and is raised by one or more MetricAssessments that detected threshold violations. Can be mitigated by CountermeasureExecutions. The timestamp of the occurrence is recorded via mqto:occurrenceTime. Note: FailureOccurrence is not a lis:Activity — a failure is something that happens to a system, not a deliberate activity performed by an agent.</span>
       </div>
       <dl class="description">
          <dt>has super-classes</dt>
          <dd>
-            <a href="http://rds.posccaesar.org/ontology/lis14/rdl/Activity"
-               target="_blank"
-               title="http://rds.posccaesar.org/ontology/lis14/rdl/Activity">activity</a>, <a href="http://rds.posccaesar.org/ontology/lis14/rdl/Actual"
+            <a href="http://rds.posccaesar.org/ontology/lis14/rdl/Actual"
                target="_blank"
                title="http://rds.posccaesar.org/ontology/lis14/rdl/Actual">actual</a>
          </dd>
@@ -411,8 +455,8 @@ This section provides details for each class and property defined by Manufacturi
          </dd>
          <dt>is in range of</dt>
          <dd>
-            <a href="#rest" title="https://w3id.org/mqto#rest">rest</a>
-            <sup class="type-op" title="object property">op</sup>, <a href="#steps" title="https://w3id.org/mqto#steps">steps</a>
+            <a href="#hasStepList" title="https://w3id.org/mqto#hasStepList">has step list</a>
+            <sup class="type-op" title="object property">op</sup>, <a href="#rest" title="https://w3id.org/mqto#rest">rest</a>
             <sup class="type-op" title="object property">op</sup>
          </dd>
          <dt>has members</dt>
@@ -566,7 +610,7 @@ This section provides details for each class and property defined by Manufacturi
       <p>
          <strong>IRI:</strong> https://w3id.org/mqto#MetricAssessment</p>
       <div class="comment">
-         <span class="markdown">An instance-layer evaluation that implements a Metric specification by computing a value from actual Observations and comparing it against threshold bounds. Calculated for an ActualIshikawaItem at a specific time, based on observations within a time window. Produces both a calculatedValue (quantitative result) and assessmentValue (boolean pass/fail). When threshold violations are detected, raises FailureOccurrences.</span>
+         <span class="markdown">An instance-layer evaluation that implements a Metric specification by computing a value from actual Observations or Actuations and comparing it against threshold bounds. Calculated for an ActualIshikawaItem at a specific time, based on DataEvents (Observations or Actuations) within a time window. Produces both a calculatedValue (quantitative result) and assessmentValue (boolean pass/fail). When threshold violations are detected, raises FailureOccurrences.</span>
       </div>
       <dl>
          <dt>Example</dt>
@@ -625,16 +669,6 @@ This section provides details for each class and property defined by Manufacturi
                target="_blank"
                title="http://www.w3.org/ns/sosa/ObservableProperty">observable property</a>
          </dd>
-         <dt>is in domain of</dt>
-         <dd>
-            <a href="#evaluatedBy" title="https://w3id.org/mqto#evaluatedBy">evaluated by</a>
-            <sup class="type-op" title="object property">op</sup>
-         </dd>
-         <dt>is in range of</dt>
-         <dd>
-            <a href="#evaluatesProperty" title="https://w3id.org/mqto#evaluatesProperty">evaluates property</a>
-            <sup class="type-op" title="object property">op</sup>
-         </dd>
       </dl>
    </div>
    <div class="entity" id="Observation">
@@ -650,19 +684,10 @@ This section provides details for each class and property defined by Manufacturi
       <dl class="description">
          <dt>has super-classes</dt>
          <dd>
-            <a href="http://www.w3.org/ns/sosa/Observation"
+            <a href="#DataEvent" title="https://w3id.org/mqto#DataEvent">Data Event</a>
+            <sup class="type-c" title="class">c</sup>, <a href="http://www.w3.org/ns/sosa/Observation"
                target="_blank"
                title="http://www.w3.org/ns/sosa/Observation">observation</a>
-         </dd>
-         <dt>is in domain of</dt>
-         <dd>
-            <a href="#baseFor" title="https://w3id.org/mqto#baseFor">base for</a>
-            <sup class="type-op" title="object property">op</sup>
-         </dd>
-         <dt>is in range of</dt>
-         <dd>
-            <a href="#basedOn" title="https://w3id.org/mqto#basedOn">based on</a>
-            <sup class="type-op" title="object property">op</sup>
          </dd>
       </dl>
    </div>
@@ -748,6 +773,16 @@ This section provides details for each class and property defined by Manufacturi
             <a href="#ActuableProperty" title="https://w3id.org/mqto#ActuableProperty">Actuable Property</a>
             <sup class="type-c" title="class">c</sup>, <a href="#ObservableProperty" title="https://w3id.org/mqto#ObservableProperty">Observable Property</a>
             <sup class="type-c" title="class">c</sup>
+         </dd>
+         <dt>is in domain of</dt>
+         <dd>
+            <a href="#evaluatedBy" title="https://w3id.org/mqto#evaluatedBy">evaluated by</a>
+            <sup class="type-op" title="object property">op</sup>
+         </dd>
+         <dt>is in range of</dt>
+         <dd>
+            <a href="#evaluatesProperty" title="https://w3id.org/mqto#evaluatesProperty">evaluates property</a>
+            <sup class="type-op" title="object property">op</sup>
          </dd>
       </dl>
    </div>
@@ -873,16 +908,10 @@ This section provides details for each class and property defined by Manufacturi
          <a href="#hasFailure" title="https://w3id.org/mqto#hasFailure">has failure</a>
       </li>
       <li>
-         <a href="#hasFirstStep" title="https://w3id.org/mqto#hasFirstStep">has first step</a>
-      </li>
-      <li>
          <a href="#hasMetric" title="https://w3id.org/mqto#hasMetric">has metric</a>
       </li>
       <li>
-         <a href="#hasNextStep" title="https://w3id.org/mqto#hasNextStep">has next step</a>
-      </li>
-      <li>
-         <a href="#hasStep" title="https://w3id.org/mqto#hasStep">has step</a>
+         <a href="#hasStepList" title="https://w3id.org/mqto#hasStepList">has step list</a>
       </li>
       <li>
          <a href="#metricBelongsTo" title="https://w3id.org/mqto#metricBelongsTo">metric belongs to</a>
@@ -927,9 +956,6 @@ This section provides details for each class and property defined by Manufacturi
          <a href="#signalProvidedBy" title="https://w3id.org/mqto#signalProvidedBy">signal provided by</a>
       </li>
       <li>
-         <a href="#steps" title="https://w3id.org/mqto#steps">steps</a>
-      </li>
-      <li>
          <a href="#suggested" title="https://w3id.org/mqto#suggested">suggested</a>
       </li>
       <li>
@@ -969,13 +995,13 @@ This section provides details for each class and property defined by Manufacturi
       <p>
          <strong>IRI:</strong> https://w3id.org/mqto#baseFor</p>
       <div class="comment">
-         <span class="markdown">Indicates that an Observation serves as the data foundation for a MetricAssessment calculation. Inverse of basedOn. Enables tracing from raw sensor data to computed metrics.</span>
+         <span class="markdown">Indicates that an Observation or Actuation serves as the data foundation for a MetricAssessment calculation. Inverse of basedOn. Enables tracing from raw sensor data or actuation events to computed metrics.</span>
       </div>
       <div class="description">
          <dl>
             <dt>has domain</dt>
             <dd>
-               <a href="#Observation" title="https://w3id.org/mqto#Observation">Observation</a>
+               <a href="#DataEvent" title="https://w3id.org/mqto#DataEvent">Data Event</a>
                <sup class="type-c" title="class">c</sup>
             </dd>
             <dt>has range</dt>
@@ -999,7 +1025,7 @@ This section provides details for each class and property defined by Manufacturi
       <p>
          <strong>IRI:</strong> https://w3id.org/mqto#basedOn</p>
       <div class="comment">
-         <span class="markdown">Links a MetricAssessment to the Observation(s) used as input data for its calculation. Establishes the data provenance chain from raw sensor readings to computed metrics. Inverse of baseFor.</span>
+         <span class="markdown">Links a MetricAssessment to the Observation(s) or Actuation(s) used as input data for its calculation. Establishes the data provenance chain from raw sensor readings or actuation events to computed metrics. Inverse of baseFor.</span>
       </div>
       <div class="description">
          <dl>
@@ -1010,7 +1036,7 @@ This section provides details for each class and property defined by Manufacturi
             </dd>
             <dt>has range</dt>
             <dd>
-               <a href="#Observation" title="https://w3id.org/mqto#Observation">Observation</a>
+               <a href="#DataEvent" title="https://w3id.org/mqto#DataEvent">Data Event</a>
                <sup class="type-c" title="class">c</sup>
             </dd>
             <dt>is inverse of</dt>
@@ -1278,13 +1304,13 @@ This section provides details for each class and property defined by Manufacturi
       <p>
          <strong>IRI:</strong> https://w3id.org/mqto#evaluatedBy</p>
       <div class="comment">
-         <span class="markdown">Relates an ObservableProperty to the MetricAssessment that evaluated it (actual layer). Inverse of mqto:evaluatesProperty. Counterpart to mqto:readBy in the specified layer.</span>
+         <span class="markdown">Relates a Property (ObservableProperty or ActuableProperty) to the MetricAssessment that evaluated it (actual layer). Inverse of mqto:evaluatesProperty. Counterpart to mqto:readBy in the specified layer.</span>
       </div>
       <div class="description">
          <dl>
             <dt>has domain</dt>
             <dd>
-               <a href="#ObservableProperty" title="https://w3id.org/mqto#ObservableProperty">Observable Property</a>
+               <a href="#Property" title="https://w3id.org/mqto#Property">Property</a>
                <sup class="type-c" title="class">c</sup>
             </dd>
             <dt>has range</dt>
@@ -1308,7 +1334,7 @@ This section provides details for each class and property defined by Manufacturi
       <p>
          <strong>IRI:</strong> https://w3id.org/mqto#evaluatesProperty</p>
       <div class="comment">
-         <span class="markdown">Relates a MetricAssessment to the ObservableProperty it evaluated (actual layer). Counterpart to mqto:readsFrom, which relates a Metric to a Signal in the specified layer.</span>
+         <span class="markdown">Relates a MetricAssessment to the Property (ObservableProperty or ActuableProperty) it evaluated (actual layer). Counterpart to mqto:readsFrom, which relates a Metric to a Signal in the specified layer.</span>
       </div>
       <div class="description">
          <dl>
@@ -1319,7 +1345,7 @@ This section provides details for each class and property defined by Manufacturi
             </dd>
             <dt>has range</dt>
             <dd>
-               <a href="#ObservableProperty" title="https://w3id.org/mqto#ObservableProperty">Observable Property</a>
+               <a href="#Property" title="https://w3id.org/mqto#Property">Property</a>
                <sup class="type-c" title="class">c</sup>
             </dd>
             <dt>is inverse of</dt>
@@ -1415,37 +1441,6 @@ This section provides details for each class and property defined by Manufacturi
          </dl>
       </div>
    </div>
-   <div class="entity" id="hasFirstStep">
-      <h3>has first step<sup class="type-op" title="object property">op</sup>
-         <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a>
-         </span>
-      </h3>
-      <p>
-         <strong>IRI:</strong> https://w3id.org/mqto#hasFirstStep</p>
-      <div class="comment">
-         <span class="markdown">Points to the first CountermeasureStepExecution in the concrete execution chain. In the actual layer, steps are performed in a fixed linear order and are not reused, so the order is encoded directly in the chain via mqto:hasNextStep.</span>
-      </div>
-      <div class="description">
-         <dl>
-            <dt>has super-properties</dt>
-            <dd>
-               <a href="#hasStep" title="https://w3id.org/mqto#hasStep">has step</a>
-               <sup class="type-op" title="object property">op</sup>
-            </dd>
-            <dt>has domain</dt>
-            <dd>
-               <a href="#CountermeasureExecution" title="https://w3id.org/mqto#CountermeasureExecution">Countermeasure Execution</a>
-               <sup class="type-c" title="class">c</sup>
-            </dd>
-            <dt>has range</dt>
-            <dd>
-               <a href="#CountermeasureStepExecution"
-                  title="https://w3id.org/mqto#CountermeasureStepExecution">Countermeasure Step Execution</a>
-               <sup class="type-c" title="class">c</sup>
-            </dd>
-         </dl>
-      </div>
-   </div>
    <div class="entity" id="hasMetric">
       <h3>has metric<sup class="type-op" title="object property">op</sup>
          <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a>
@@ -1476,66 +1471,26 @@ This section provides details for each class and property defined by Manufacturi
          </dl>
       </div>
    </div>
-   <div class="entity" id="hasNextStep">
-      <h3>has next step<sup class="type-op" title="object property">op</sup>
+   <div class="entity" id="hasStepList">
+      <h3>has step list<sup class="type-op" title="object property">op</sup>
          <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a>
          </span>
       </h3>
       <p>
-         <strong>IRI:</strong> https://w3id.org/mqto#hasNextStep</p>
+         <strong>IRI:</strong> https://w3id.org/mqto#hasStepList</p>
       <div class="comment">
-         <span class="markdown">Links one CountermeasureStepExecution to the next in the concrete execution sequence. Unlike the specified layer (which uses mqto:List for reusability), the actual execution occurs once in a specific order, so step-to-step chaining is appropriate here.</span>
+         <span class="markdown">Links a Countermeasure to its ordered list of steps (mqto:List). The indirection via mqto:List enables the same CountermeasureStep to be referenced in multiple Countermeasure definitions (reuse across procedures). Named hasStepList rather than hasStep to distinguish it from pko:hasStep, which links directly to step instances rather than to a list container.</span>
       </div>
       <div class="description">
          <dl>
-            <dt>has super-properties</dt>
-            <dd>
-               <a href="#hasStep" title="https://w3id.org/mqto#hasStep">has step</a>
-               <sup class="type-op" title="object property">op</sup>
-            </dd>
             <dt>has domain</dt>
             <dd>
-               <a href="#CountermeasureStepExecution"
-                  title="https://w3id.org/mqto#CountermeasureStepExecution">Countermeasure Step Execution</a>
+               <a href="#Countermeasure" title="https://w3id.org/mqto#Countermeasure">Countermeasure</a>
                <sup class="type-c" title="class">c</sup>
             </dd>
             <dt>has range</dt>
             <dd>
-               <a href="#CountermeasureStepExecution"
-                  title="https://w3id.org/mqto#CountermeasureStepExecution">Countermeasure Step Execution</a>
-               <sup class="type-c" title="class">c</sup>
-            </dd>
-         </dl>
-      </div>
-   </div>
-   <div class="entity" id="hasStep">
-      <h3>has step<sup class="type-op" title="object property">op</sup>
-         <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a>
-         </span>
-      </h3>
-      <p>
-         <strong>IRI:</strong> https://w3id.org/mqto#hasStep</p>
-      <div class="comment">
-         <span class="markdown">Links a CountermeasureExecution to its constituent CountermeasureStepExecutions in the actual layer. General property for all steps; hasFirstStep identifies the starting step, and hasNextStep chains the sequence. Subproperty of lis:hasActivityPart. No global rdfs:domain is declared; the source class is constrained by the allValuesFrom restriction on CountermeasureExecution, avoiding unintended domain inferences on hasNextStep (which is a subproperty).</span>
-      </div>
-      <div class="description">
-         <dl>
-            <dt>has super-properties</dt>
-            <dd>
-               <a href="http://rds.posccaesar.org/ontology/lis14/rdl/hasActivityPart"
-                  target="_blank"
-                  title="http://rds.posccaesar.org/ontology/lis14/rdl/hasActivityPart">has activity part</a>
-            </dd>
-            <dt>has sub-properties</dt>
-            <dd>
-               <a href="#hasFirstStep" title="https://w3id.org/mqto#hasFirstStep">has first step</a>
-               <sup class="type-op" title="object property">op</sup>, <a href="#hasNextStep" title="https://w3id.org/mqto#hasNextStep">has next step</a>
-               <sup class="type-op" title="object property">op</sup>
-            </dd>
-            <dt>has range</dt>
-            <dd>
-               <a href="#CountermeasureStepExecution"
-                  title="https://w3id.org/mqto#CountermeasureStepExecution">Countermeasure Step Execution</a>
+               <a href="#List" title="https://w3id.org/mqto#List">List</a>
                <sup class="type-c" title="class">c</sup>
             </dd>
          </dl>
@@ -1959,31 +1914,6 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
             <dd>
                <a href="#providesSignal" title="https://w3id.org/mqto#providesSignal">provides signal</a>
                <sup class="type-op" title="object property">op</sup>
-            </dd>
-         </dl>
-      </div>
-   </div>
-   <div class="entity" id="steps">
-      <h3>steps<sup class="type-op" title="object property">op</sup>
-         <span class="backlink"> back to <a href="#toc">ToC</a> or <a href="#objectproperties">Object Property ToC</a>
-         </span>
-      </h3>
-      <p>
-         <strong>IRI:</strong> https://w3id.org/mqto#steps</p>
-      <div class="comment">
-         <span class="markdown">Links a Countermeasure to its ordered list of steps. The indirection via mqto:List enables the same CountermeasureStep to be referenced in multiple Countermeasure definitions (reuse across procedures).</span>
-      </div>
-      <div class="description">
-         <dl>
-            <dt>has domain</dt>
-            <dd>
-               <a href="#Countermeasure" title="https://w3id.org/mqto#Countermeasure">Countermeasure</a>
-               <sup class="type-c" title="class">c</sup>
-            </dd>
-            <dt>has range</dt>
-            <dd>
-               <a href="#List" title="https://w3id.org/mqto#List">List</a>
-               <sup class="type-c" title="class">c</sup>
             </dd>
          </dl>
       </div>

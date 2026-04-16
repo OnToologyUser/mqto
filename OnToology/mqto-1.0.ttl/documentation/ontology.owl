@@ -31,7 +31,7 @@
         <terms:creator rdf:resource="https://orcid.org/0000-0001-9521-8907"/>
         <terms:description xml:lang="en">A generalised ontology for manufacturing quality troubleshooting, applicable across different manufacturing domains. Covers both the specified (schema-level) and actual (instance-level) layers of a manufacturing process, with a focus on root cause analysis, failure diagnosis, and countermeasure recommendation.</terms:description>
         <terms:license rdf:resource="http://www.apache.org/licenses/LICENSE-2.0"/>
-        <terms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-14</terms:modified>
+        <terms:modified>2026-04-16</terms:modified>
         <terms:publisher rdf:resource="https://github.com/dg-assist"/>
         <terms:rights xml:lang="en">Copyright 2026 DG Assist. Licensed under the Apache License, Version 2.0.</terms:rights>
         <terms:subject xml:lang="en">Industry 4.0</terms:subject>
@@ -175,9 +175,9 @@
 
     <owl:ObjectProperty rdf:about="https://w3id.org/mqto#baseFor">
         <owl:inverseOf rdf:resource="https://w3id.org/mqto#basedOn"/>
-        <rdfs:domain rdf:resource="https://w3id.org/mqto#Observation"/>
+        <rdfs:domain rdf:resource="https://w3id.org/mqto#DataEvent"/>
         <rdfs:range rdf:resource="https://w3id.org/mqto#MetricAssessment"/>
-        <rdfs:comment xml:lang="en">Indicates that an Observation serves as the data foundation for a MetricAssessment calculation. Inverse of basedOn. Enables tracing from raw sensor data to computed metrics.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates that an Observation or Actuation serves as the data foundation for a MetricAssessment calculation. Inverse of basedOn. Enables tracing from raw sensor data or actuation events to computed metrics.</rdfs:comment>
         <rdfs:label xml:lang="en">base for</rdfs:label>
     </owl:ObjectProperty>
     
@@ -188,8 +188,8 @@
 
     <owl:ObjectProperty rdf:about="https://w3id.org/mqto#basedOn">
         <rdfs:domain rdf:resource="https://w3id.org/mqto#MetricAssessment"/>
-        <rdfs:range rdf:resource="https://w3id.org/mqto#Observation"/>
-        <rdfs:comment xml:lang="en">Links a MetricAssessment to the Observation(s) used as input data for its calculation. Establishes the data provenance chain from raw sensor readings to computed metrics. Inverse of baseFor.</rdfs:comment>
+        <rdfs:range rdf:resource="https://w3id.org/mqto#DataEvent"/>
+        <rdfs:comment xml:lang="en">Links a MetricAssessment to the Observation(s) or Actuation(s) used as input data for its calculation. Establishes the data provenance chain from raw sensor readings or actuation events to computed metrics. Inverse of baseFor.</rdfs:comment>
         <rdfs:label xml:lang="en">based on</rdfs:label>
     </owl:ObjectProperty>
     
@@ -306,9 +306,9 @@
 
     <owl:ObjectProperty rdf:about="https://w3id.org/mqto#evaluatedBy">
         <owl:inverseOf rdf:resource="https://w3id.org/mqto#evaluatesProperty"/>
-        <rdfs:domain rdf:resource="https://w3id.org/mqto#ObservableProperty"/>
+        <rdfs:domain rdf:resource="https://w3id.org/mqto#Property"/>
         <rdfs:range rdf:resource="https://w3id.org/mqto#MetricAssessment"/>
-        <rdfs:comment xml:lang="en">Relates an ObservableProperty to the MetricAssessment that evaluated it (actual layer). Inverse of mqto:evaluatesProperty. Counterpart to mqto:readBy in the specified layer.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Relates a Property (ObservableProperty or ActuableProperty) to the MetricAssessment that evaluated it (actual layer). Inverse of mqto:evaluatesProperty. Counterpart to mqto:readBy in the specified layer.</rdfs:comment>
         <rdfs:label xml:lang="en">evaluated by</rdfs:label>
     </owl:ObjectProperty>
     
@@ -319,8 +319,8 @@
 
     <owl:ObjectProperty rdf:about="https://w3id.org/mqto#evaluatesProperty">
         <rdfs:domain rdf:resource="https://w3id.org/mqto#MetricAssessment"/>
-        <rdfs:range rdf:resource="https://w3id.org/mqto#ObservableProperty"/>
-        <rdfs:comment xml:lang="en">Relates a MetricAssessment to the ObservableProperty it evaluated (actual layer). Counterpart to mqto:readsFrom, which relates a Metric to a Signal in the specified layer.</rdfs:comment>
+        <rdfs:range rdf:resource="https://w3id.org/mqto#Property"/>
+        <rdfs:comment xml:lang="en">Relates a MetricAssessment to the Property (ObservableProperty or ActuableProperty) it evaluated (actual layer). Counterpart to mqto:readsFrom, which relates a Metric to a Signal in the specified layer.</rdfs:comment>
         <rdfs:label xml:lang="en">evaluates property</rdfs:label>
     </owl:ObjectProperty>
     
@@ -363,19 +363,6 @@
     
 
 
-    <!-- https://w3id.org/mqto#hasFirstStep -->
-
-
-    <owl:ObjectProperty rdf:about="https://w3id.org/mqto#hasFirstStep">
-        <rdfs:subPropertyOf rdf:resource="https://w3id.org/mqto#hasStep"/>
-        <rdfs:domain rdf:resource="https://w3id.org/mqto#CountermeasureExecution"/>
-        <rdfs:range rdf:resource="https://w3id.org/mqto#CountermeasureStepExecution"/>
-        <rdfs:comment xml:lang="en">Points to the first CountermeasureStepExecution in the concrete execution chain. In the actual layer, steps are performed in a fixed linear order and are not reused, so the order is encoded directly in the chain via mqto:hasNextStep.</rdfs:comment>
-        <rdfs:label xml:lang="en">has first step</rdfs:label>
-    </owl:ObjectProperty>
-    
-
-
     <!-- https://w3id.org/mqto#hasMetric -->
 
 
@@ -389,27 +376,14 @@
     
 
 
-    <!-- https://w3id.org/mqto#hasNextStep -->
+    <!-- https://w3id.org/mqto#hasStepList -->
 
 
-    <owl:ObjectProperty rdf:about="https://w3id.org/mqto#hasNextStep">
-        <rdfs:subPropertyOf rdf:resource="https://w3id.org/mqto#hasStep"/>
-        <rdfs:domain rdf:resource="https://w3id.org/mqto#CountermeasureStepExecution"/>
-        <rdfs:range rdf:resource="https://w3id.org/mqto#CountermeasureStepExecution"/>
-        <rdfs:comment xml:lang="en">Links one CountermeasureStepExecution to the next in the concrete execution sequence. Unlike the specified layer (which uses mqto:List for reusability), the actual execution occurs once in a specific order, so step-to-step chaining is appropriate here.</rdfs:comment>
-        <rdfs:label xml:lang="en">has next step</rdfs:label>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- https://w3id.org/mqto#hasStep -->
-
-
-    <owl:ObjectProperty rdf:about="https://w3id.org/mqto#hasStep">
-        <rdfs:subPropertyOf rdf:resource="http://rds.posccaesar.org/ontology/lis14/rdl/hasActivityPart"/>
-        <rdfs:range rdf:resource="https://w3id.org/mqto#CountermeasureStepExecution"/>
-        <rdfs:comment xml:lang="en">Links a CountermeasureExecution to its constituent CountermeasureStepExecutions in the actual layer. General property for all steps; hasFirstStep identifies the starting step, and hasNextStep chains the sequence. Subproperty of lis:hasActivityPart. No global rdfs:domain is declared; the source class is constrained by the allValuesFrom restriction on CountermeasureExecution, avoiding unintended domain inferences on hasNextStep (which is a subproperty).</rdfs:comment>
-        <rdfs:label xml:lang="en">has step</rdfs:label>
+    <owl:ObjectProperty rdf:about="https://w3id.org/mqto#hasStepList">
+        <rdfs:domain rdf:resource="https://w3id.org/mqto#Countermeasure"/>
+        <rdfs:range rdf:resource="https://w3id.org/mqto#List"/>
+        <rdfs:comment xml:lang="en">Links a Countermeasure to its ordered list of steps (mqto:List). The indirection via mqto:List enables the same CountermeasureStep to be referenced in multiple Countermeasure definitions (reuse across procedures). Named hasStepList rather than hasStep to distinguish it from pko:hasStep, which links directly to step instances rather than to a list container.</rdfs:comment>
+        <rdfs:label xml:lang="en">has step list</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -597,18 +571,6 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
     
 
 
-    <!-- https://w3id.org/mqto#steps -->
-
-
-    <owl:ObjectProperty rdf:about="https://w3id.org/mqto#steps">
-        <rdfs:domain rdf:resource="https://w3id.org/mqto#Countermeasure"/>
-        <rdfs:range rdf:resource="https://w3id.org/mqto#List"/>
-        <rdfs:comment xml:lang="en">Links a Countermeasure to its ordered list of steps. The indirection via mqto:List enables the same CountermeasureStep to be referenced in multiple Countermeasure definitions (reuse across procedures).</rdfs:comment>
-        <rdfs:label xml:lang="en">steps</rdfs:label>
-    </owl:ObjectProperty>
-    
-
-
     <!-- https://w3id.org/mqto#suggested -->
 
 
@@ -631,6 +593,13 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
         <rdfs:comment xml:lang="en">A countermeasure execution was suggested by a failure occurrence.</rdfs:comment>
         <rdfs:label xml:lang="en">suggested by</rdfs:label>
     </owl:ObjectProperty>
+    
+
+
+    <!-- https://w3id.org/pko#includesStepExecution -->
+
+
+    <owl:ObjectProperty rdf:about="https://w3id.org/pko#includesStepExecution"/>
     
 
 
@@ -926,12 +895,6 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
     <owl:Class rdf:about="https://w3id.org/mqto#ActuableProperty">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/sosa/ActuableProperty"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/mqto#Property"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.w3.org/ns/ssn/isPropertyOf"/>
-                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#ActualIshikawaItem"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
         <rdfs:comment xml:lang="en">An actuable property of an ActualIshikawaItem that can be controlled or modified via Actuations. As a subclass of mqto:Property, it implements a Signal specification from the specified layer. Represents properties that can be set or modified, such as setpoints, valve positions, motor speeds, or control commands. The Signal in the specified layer defines the control channel metadata, while ActuableProperty represents the actual controllable quality of a specific feature of interest.</rdfs:comment>
         <rdfs:label xml:lang="en">Actuable Property</rdfs:label>
     </owl:Class>
@@ -944,20 +907,20 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
     <owl:Class rdf:about="https://w3id.org/mqto#ActualIshikawaItem">
         <rdfs:subClassOf rdf:resource="http://rds.posccaesar.org/ontology/lis14/rdl/Actual"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/sosa/FeatureOfInterest"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.w3.org/ns/sosa/isFeatureOfInterestOf"/>
-                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#Observation"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.w3.org/ns/ssn/hasProperty"/>
-                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#ObservableProperty"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment xml:lang="en">Abstract superclass for actual/instance layer counterparts of IshikawaItem. Integrates SOSA: each ActualIshikawaItem is a FeatureOfInterest that can be observed, has ObservableProperties, and can have FailureOccurrences. MQTO defines three concrete subclasses: PhysicalMachine (implements Machine), PhysicalMaterial (implements Material), and ProcessExecution (implements Method). Actual-layer counterparts for Manpower and Measurement are not defined in MQTO; domain-specific ontologies are expected to provide them.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Abstract superclass for actual/instance layer counterparts of IshikawaItem. Integrates SOSA: each ActualIshikawaItem is a FeatureOfInterest whose observations, properties, and failure occurrences are constrained at the subclass level. MQTO defines three concrete subclasses: PhysicalMachine (implements Machine), PhysicalMaterial (implements Material), and ProcessExecution (implements Method). Actual-layer counterparts for Manpower and Measurement are not defined in MQTO; domain-specific ontologies are expected to provide them.</rdfs:comment>
         <rdfs:label xml:lang="en">Actual Ishikawa Item</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://w3id.org/mqto#Actuation -->
+
+
+    <owl:Class rdf:about="https://w3id.org/mqto#Actuation">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/sosa/Actuation"/>
+        <rdfs:subClassOf rdf:resource="https://w3id.org/mqto#DataEvent"/>
+        <rdfs:comment xml:lang="en">Subclass of sosa:Actuation, representing a single actuation event that changes the state of an ActuatableProperty of an ActualIshikawaItem. As a subclass of mqto:DataEvent, actuation events can serve as the basis for MetricAssessments alongside Observations.</rdfs:comment>
+        <rdfs:label xml:lang="en">Actuation</rdfs:label>
     </owl:Class>
     
 
@@ -971,7 +934,7 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
         <rdfs:subClassOf rdf:resource="https://w3id.org/pko#Procedure"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://w3id.org/mqto#steps"/>
+                <owl:onProperty rdf:resource="https://w3id.org/mqto#hasStepList"/>
                 <owl:someValuesFrom rdf:resource="https://w3id.org/mqto#List"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -1016,12 +979,6 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://w3id.org/mqto#hasStep"/>
-                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#CountermeasureStepExecution"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/mqto#mitigated"/>
                 <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#FailureOccurrence"/>
             </owl:Restriction>
@@ -1034,12 +991,11 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://w3id.org/mqto#hasFirstStep"/>
-                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
-                <owl:onClass rdf:resource="https://w3id.org/mqto#CountermeasureStepExecution"/>
+                <owl:onProperty rdf:resource="https://w3id.org/pko#includesStepExecution"/>
+                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#CountermeasureStepExecution"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment xml:lang="en">The actual execution of a Countermeasure procedure, performed to mitigate one or more FailureOccurrences. As a subclass of both lis:Activity and lis:Actual, it is a concrete temporal event that implements a Countermeasure specification. Links to the Countermeasure via lis:implements, records mitigated FailureOccurrences via mqto:mitigated, and tracks constituent steps via mqto:hasStep. Participants (machines, materials, or personnel) are not constrained at the MQTO level; the participant restriction is carried by the Countermeasure specification, and domain-specific ontologies may further restrict or extend participation. As a subclass of pko:ProcedureExecution, countermeasure executions align with PKO&apos;s procedure execution model.</rdfs:comment>
+        <rdfs:comment xml:lang="en">The actual execution of a Countermeasure procedure, performed to mitigate one or more FailureOccurrences. As a subclass of both lis:Activity and lis:Actual, it is a concrete temporal event that implements a Countermeasure specification. Links to the Countermeasure via lis:implements, records mitigated FailureOccurrences via mqto:mitigated, and tracks constituent steps via pko:includesStepExecution. Step sequencing uses pko:nextStepExecution and pko:previousStepExecution inherited from pko:ProcedureExecution. As a subclass of pko:ProcedureExecution, countermeasure executions align with PKO&apos;s procedure execution model.</rdfs:comment>
         <rdfs:label xml:lang="en">Countermeasure Execution</rdfs:label>
     </owl:Class>
     
@@ -1071,8 +1027,18 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
                 <owl:someValuesFrom rdf:resource="https://w3id.org/mqto#CountermeasureStep"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment xml:lang="en">The actual, single execution of one CountermeasureStep. Each execution implements a specific CountermeasureStep from the specified layer via lis:implements, performed in a concrete, non-reused linear order encoded via mqto:hasFirstStep / mqto:hasNextStep, contrasting with the specified layer where mqto:List enables step reuse across procedures. As a subclass of both lis:Activity and lis:Actual, it is a concrete temporal activity. As a subclass of pko:StepExecution, countermeasure step executions align with PKO&apos;s step execution model.</rdfs:comment>
+        <rdfs:comment xml:lang="en">The actual, single execution of one CountermeasureStep. Each execution implements a specific CountermeasureStep from the specified layer via lis:implements. Step sequencing uses pko:nextStepExecution and pko:previousStepExecution from PKO, contrasting with the specified layer where mqto:List enables step reuse across procedures. As a subclass of both lis:Activity and lis:Actual, it is a concrete temporal activity. As a subclass of pko:StepExecution, countermeasure step executions align with PKO&apos;s step execution model.</rdfs:comment>
         <rdfs:label xml:lang="en">Countermeasure Step Execution</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://w3id.org/mqto#DataEvent -->
+
+
+    <owl:Class rdf:about="https://w3id.org/mqto#DataEvent">
+        <rdfs:comment xml:lang="en">Common superclass of mqto:Observation and mqto:Actuation. Provides a named type for the range of mqto:basedOn, allowing MetricAssessments to be grounded in either sensor observations or actuation events. Mirrors the mqto:Property pattern which bridges ObservableProperty and ActuableProperty.</rdfs:comment>
+        <rdfs:label xml:lang="en">Data Event</rdfs:label>
     </owl:Class>
     
 
@@ -1128,7 +1094,6 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
 
 
     <owl:Class rdf:about="https://w3id.org/mqto#FailureOccurrence">
-        <rdfs:subClassOf rdf:resource="http://rds.posccaesar.org/ontology/lis14/rdl/Activity"/>
         <rdfs:subClassOf rdf:resource="http://rds.posccaesar.org/ontology/lis14/rdl/Actual"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -1148,7 +1113,7 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
                 <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#MetricAssessment"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment xml:lang="en">An instance-layer temporal event representing a specific quality defect or operational problem detected during production. As a subclass of both lis:Activity and lis:Actual, it is a concrete occurrence in time. Implements a Failure Mode specification, appears on an ActualIshikawaItem, and is raised by one or more MetricAssessments that detected threshold violations. Can be mitigated by CountermeasureExecutions. The timestamp of the occurrence is recorded via mqto:occurrenceTime.</rdfs:comment>
+        <rdfs:comment xml:lang="en">An instance-layer entity representing a specific quality defect or operational problem detected during production. As a subclass of lis:Actual, it is a concrete instance-level entity that implements a FailureMode specification. Appears on an ActualIshikawaItem, and is raised by one or more MetricAssessments that detected threshold violations. Can be mitigated by CountermeasureExecutions. The timestamp of the occurrence is recorded via mqto:occurrenceTime. Note: FailureOccurrence is not a lis:Activity — a failure is something that happens to a system, not a deliberate activity performed by an agent.</rdfs:comment>
         <rdfs:label xml:lang="en">Failure Occurrence</rdfs:label>
     </owl:Class>
     
@@ -1340,13 +1305,13 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/mqto#basedOn"/>
-                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#Observation"/>
+                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#DataEvent"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://w3id.org/mqto#evaluatesProperty"/>
-                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#ObservableProperty"/>
+                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#Property"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -1355,7 +1320,7 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
                 <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#FailureOccurrence"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment xml:lang="en">An instance-layer evaluation that implements a Metric specification by computing a value from actual Observations and comparing it against threshold bounds. Calculated for an ActualIshikawaItem at a specific time, based on observations within a time window. Produces both a calculatedValue (quantitative result) and assessmentValue (boolean pass/fail). When threshold violations are detected, raises FailureOccurrences.</rdfs:comment>
+        <rdfs:comment xml:lang="en">An instance-layer evaluation that implements a Metric specification by computing a value from actual Observations or Actuations and comparing it against threshold bounds. Calculated for an ActualIshikawaItem at a specific time, based on DataEvents (Observations or Actuations) within a time window. Produces both a calculatedValue (quantitative result) and assessmentValue (boolean pass/fail). When threshold violations are detected, raises FailureOccurrences.</rdfs:comment>
         <rdfs:label xml:lang="en">Metric Assessment</rdfs:label>
         <skos:example xml:lang="en">ex:MA_001  a mqto:MetricAssessment ;
     lis:implements       ex:TemperatureMetric ;
@@ -1374,18 +1339,6 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
     <owl:Class rdf:about="https://w3id.org/mqto#ObservableProperty">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/sosa/ObservableProperty"/>
         <rdfs:subClassOf rdf:resource="https://w3id.org/mqto#Property"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.w3.org/ns/ssn/isPropertyOf"/>
-                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#ActualIshikawaItem"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://w3id.org/mqto#evaluatedBy"/>
-                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#MetricAssessment"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
         <rdfs:comment xml:lang="en">An observable property of an ActualIshikawaItem that can be measured via Observations. As a subclass of mqto:Property, it implements a Signal specification from the specified layer, establishing traceability from actual observations back to the specified data channel definition. Note: subclassing both sosa:ObservableProperty (an abstract quality type) and lis:Actual (via mqto:Property, a concrete instance) reflects the modelling choice that each mqto:ObservableProperty individual represents a specific, concrete observable quality tied to a particular actual item — not a reusable abstract type. This parallels how sosa:ObservableProperty instances are used in practice (e.g. &apos;the temperature of this specific machine part&apos;) rather than as universal property types.</rdfs:comment>
         <rdfs:label xml:lang="en">Observable Property</rdfs:label>
     </owl:Class>
@@ -1397,6 +1350,7 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
 
     <owl:Class rdf:about="https://w3id.org/mqto#Observation">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/sosa/Observation"/>
+        <rdfs:subClassOf rdf:resource="https://w3id.org/mqto#DataEvent"/>
         <rdfs:comment xml:lang="en">Subclass of sosa:Observation, representing a single sensor reading or measurement event. Links to an ActualIshikawaItem (feature of interest), an ObservableProperty (what is being measured), and a Result (the measured value). Observations capture time-series data from PLCs, sensors, and SCADA systems including temperature readings, pressure measurements, and cycle times.</rdfs:comment>
         <rdfs:label xml:lang="en">Observation</rdfs:label>
     </owl:Class>
@@ -1497,6 +1451,12 @@ At query time: SELECT ?value WHERE { ?metric mqto:resultProperty ?prop . ?result
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.w3.org/ns/ssn/isPropertyOf"/>
                 <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#ActualIshikawaItem"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://w3id.org/mqto#evaluatedBy"/>
+                <owl:allValuesFrom rdf:resource="https://w3id.org/mqto#MetricAssessment"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:comment xml:lang="en">Actual-layer counterpart of Signal. Represents a property (observable or actuable) of an ActualIshikawaItem that implements a Signal specification from the specified layer. While Signal defines the data channel metadata (identifier, unit, sampling rate, direction), Property represents the actual measured or actuated quality of a specific feature of interest. This class serves as the abstract superclass for both ObservableProperty (for sensing/measurement) and ActuableProperty (for actuation/control).</rdfs:comment>
