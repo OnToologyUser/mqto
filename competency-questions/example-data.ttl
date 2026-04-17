@@ -1,0 +1,699 @@
+@prefix : <https://w3id.org/mqto#> .
+@prefix ex: <https://w3id.org/mqto/example#> .
+@prefix mqto: <https://w3id.org/mqto#> .
+@prefix lis: <http://rds.posccaesar.org/ontology/lis14/rdl/> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix ssn: <http://www.w3.org/ns/ssn/> .
+@prefix pko: <https://w3id.org/pko#> .
+@prefix p-plan: <http://purl.org/net/p-plan#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+
+# =============================================================================
+# Example dataset for MQTO competency question evaluation
+# Scenario: Die-casting production at TCG Unitech — porosity investigation
+# =============================================================================
+
+
+# =============================================================================
+# SPECIFIED LAYER
+# =============================================================================
+
+# --- IshikawaItems (5 M's) ---------------------------------------------------
+
+ex:DieCastingCell a mqto:Machine ;
+    rdfs:label "Die-casting cell"@en ;
+    mqto:identifier "Cell-Type-A" .
+
+ex:Operator a mqto:Manpower ;
+    rdfs:label "Machine operator"@en .
+
+ex:AluminiumAlloy a mqto:Material ;
+    rdfs:label "Aluminium alloy EN AC-46000"@en .
+
+ex:TemperatureMeasurement a mqto:Measurement ;
+    rdfs:label "Melt temperature measurement"@en .
+
+ex:DieCastingProcess a mqto:Method ;
+    rdfs:label "Die-casting process"@en ;
+    lis:hasParticipant ex:DieCastingCell , ex:AluminiumAlloy , ex:Operator .
+
+ex:InjectionPhase a mqto:Method ;
+    rdfs:label "Injection phase"@en ;
+    lis:activityPartOf ex:DieCastingProcess .
+
+ex:DieCastingProcess lis:hasActivityPart ex:InjectionPhase .
+
+# --- Signals (data channels) -------------------------------------------------
+
+ex:MeltTemperatureSignal a mqto:Signal ;
+    rdfs:label "Melt temperature signal"@en ;
+    mqto:signalProvidedBy ex:DieCastingCell ;
+    mqto:identifier "PLC.MeltTemp" .
+
+ex:InjectionPressureSignal a mqto:Signal ;
+    rdfs:label "Injection pressure signal"@en ;
+    mqto:signalProvidedBy ex:DieCastingCell ;
+    mqto:identifier "PLC.InjPressure" .
+
+ex:CycleTimeSignal a mqto:Signal ;
+    rdfs:label "Cycle time signal"@en ;
+    mqto:signalProvidedBy ex:DieCastingCell ;
+    mqto:identifier "PLC.CycleTime" .
+
+ex:FurnaceSetpointSignal a mqto:Signal ;
+    rdfs:label "Furnace setpoint signal"@en ;
+    mqto:signalProvidedBy ex:DieCastingCell ;
+    mqto:identifier "PLC.FurnaceSetpoint" .
+
+# Signal provided by Material (not Machine) — shows Signals are not machine-specific
+ex:ImpurityLevelSignal a mqto:Signal ;
+    rdfs:label "Impurity level signal"@en ;
+    mqto:signalProvidedBy ex:AluminiumAlloy ;
+    mqto:identifier "LAB.Impurity" .
+
+ex:DieCastingCell mqto:providesSignal ex:MeltTemperatureSignal ,
+    ex:InjectionPressureSignal , ex:CycleTimeSignal , ex:FurnaceSetpointSignal .
+ex:AluminiumAlloy mqto:providesSignal ex:ImpurityLevelSignal .
+
+# --- Metrics (KPIs) ----------------------------------------------------------
+
+ex:TemperatureDeviation a mqto:Metric ;
+    rdfs:label "Melt temperature deviation"@en ;
+    mqto:readsFrom ex:MeltTemperatureSignal ;
+    mqto:method "mean" ;
+    mqto:timeWindowSize "PT5M"^^xsd:duration ;
+    mqto:itemWindowSize 10 ;
+    mqto:lowerBound 680.0 ;
+    mqto:upperBound 720.0 ;
+    mqto:resultProperty ex:temperature ;
+    mqto:metricBelongsTo ex:DieCastingCell .
+
+ex:InjectionPressurePeak a mqto:Metric ;
+    rdfs:label "Injection pressure peak"@en ;
+    mqto:readsFrom ex:InjectionPressureSignal ;
+    mqto:method "max" ;
+    mqto:timeWindowSize "PT2M"^^xsd:duration ;
+    mqto:itemWindowSize 5 ;
+    mqto:lowerBound 800.0 ;
+    mqto:upperBound 1100.0 ;
+    mqto:resultProperty ex:pressure ;
+    mqto:metricBelongsTo ex:DieCastingCell .
+
+ex:CycleTimeVariance a mqto:Metric ;
+    rdfs:label "Cycle time variance"@en ;
+    mqto:readsFrom ex:CycleTimeSignal ;
+    mqto:method "stdev" ;
+    mqto:timeWindowSize "PT10M"^^xsd:duration ;
+    mqto:itemWindowSize 20 ;
+    mqto:lowerBound 0.0 ;
+    mqto:upperBound 3.0 ;
+    mqto:resultProperty ex:cycleTime ;
+    mqto:metricBelongsTo ex:DieCastingCell .
+
+# Material-category metric — only timeWindowSize, no itemWindowSize.
+# Demonstrates that either or both window parameters may be set.
+ex:ImpurityLevel a mqto:Metric ;
+    rdfs:label "Alloy impurity level"@en ;
+    mqto:readsFrom ex:ImpurityLevelSignal ;
+    mqto:method "latest" ;
+    mqto:timeWindowSize "PT24H"^^xsd:duration ;
+    mqto:upperBound 0.5 ;
+    mqto:resultProperty ex:impurityPct ;
+    mqto:metricBelongsTo ex:AluminiumAlloy .
+
+ex:DieCastingCell mqto:hasMetric ex:TemperatureDeviation ,
+    ex:InjectionPressurePeak , ex:CycleTimeVariance .
+ex:AluminiumAlloy mqto:hasMetric ex:ImpurityLevel .
+
+# --- Failure Modes ------------------------------------------------------------
+
+ex:Porosity a mqto:FailureMode ;
+    rdfs:label "Porosity"@en ;
+    mqto:failureBelongsTo ex:DieCastingCell ;
+    mqto:refersToMetric ex:TemperatureDeviation , ex:InjectionPressurePeak ;
+    mqto:causedBy ex:GasPorosity , ex:ShrinkagePorosity , ex:MeltTempTooHigh , ex:AlloyContamination ;
+    mqto:causedByStrongly ex:GasPorosity ;
+    mqto:causedByModerately ex:ShrinkagePorosity , ex:AlloyContamination ;
+    mqto:causedByWeakly ex:MeltTempTooHigh ;
+    mqto:weight 80 .
+
+ex:GasPorosity a mqto:FailureMode ;
+    rdfs:label "Gas porosity"@en ;
+    mqto:failureBelongsTo ex:DieCastingCell ;
+    mqto:refersToMetric ex:TemperatureDeviation ;
+    mqto:causes ex:Porosity ;
+    mqto:causesStrongly ex:Porosity ;
+    mqto:weight 60 .
+
+ex:ShrinkagePorosity a mqto:FailureMode ;
+    rdfs:label "Shrinkage porosity"@en ;
+    mqto:failureBelongsTo ex:DieCastingCell ;
+    mqto:refersToMetric ex:InjectionPressurePeak ;
+    mqto:causes ex:Porosity ;
+    mqto:causesModerately ex:Porosity .
+
+ex:MeltTempTooHigh a mqto:FailureMode ;
+    rdfs:label "Melt temperature too high"@en ;
+    mqto:failureBelongsTo ex:DieCastingCell ;
+    mqto:refersToMetric ex:TemperatureDeviation ;
+    mqto:causes ex:Porosity ;
+    mqto:causesWeakly ex:Porosity .
+
+ex:ColdShut a mqto:FailureMode ;
+    rdfs:label "Cold shut"@en ;
+    mqto:failureBelongsTo ex:DieCastingCell ;
+    mqto:refersToMetric ex:CycleTimeVariance ;
+    mqto:weight 40 .
+
+# Material-category failure — belongs to Material, not Machine
+ex:AlloyContamination a mqto:FailureMode ;
+    rdfs:label "Alloy contamination"@en ;
+    mqto:failureBelongsTo ex:AluminiumAlloy ;
+    mqto:refersToMetric ex:ImpurityLevel ;
+    mqto:causes ex:Porosity ;
+    mqto:causesModerately ex:Porosity .
+
+ex:Porosity mqto:mitigatedBy ex:AdjustMeltTemp , ex:VerifyThermocouple ,
+    ex:IncreaseSlowShot .
+
+ex:MeltTempTooHigh mqto:mitigatedBy ex:AdjustMeltTemp .
+
+ex:ColdShut mqto:mitigatedBy ex:IncreaseSlowShot .
+
+ex:AlloyContamination mqto:mitigatedBy ex:ReplaceAlloyBatch .
+
+ex:DieCastingCell mqto:hasFailure ex:Porosity , ex:GasPorosity ,
+    ex:ShrinkagePorosity , ex:MeltTempTooHigh , ex:ColdShut .
+ex:AluminiumAlloy mqto:hasFailure ex:AlloyContamination .
+
+# --- Countermeasures and Steps ------------------------------------------------
+
+# Steps (reusable)
+ex:CheckCurrentTemp a mqto:CountermeasureStep ;
+    rdfs:label "Check current melt temperature"@en .
+
+ex:AdjustFurnaceSetpoint a mqto:CountermeasureStep ;
+    rdfs:label "Adjust furnace setpoint"@en .
+
+ex:VerifyNewTemp a mqto:CountermeasureStep ;
+    rdfs:label "Verify new temperature"@en .
+
+ex:InspectThermocouple a mqto:CountermeasureStep ;
+    rdfs:label "Inspect thermocouple"@en .
+
+ex:CalibrateIfNeeded a mqto:CountermeasureStep ;
+    rdfs:label "Calibrate if needed"@en .
+
+ex:ReviewInjectionProfile a mqto:CountermeasureStep ;
+    rdfs:label "Review injection profile"@en .
+
+ex:AdjustSlowShotDuration a mqto:CountermeasureStep ;
+    rdfs:label "Adjust slow-shot phase duration"@en .
+
+ex:SwapAlloyBatch a mqto:CountermeasureStep ;
+    rdfs:label "Swap alloy batch"@en .
+
+# List structures for step ordering
+ex:AdjustMeltTemp_List1 a mqto:List ;
+    mqto:first ex:CheckCurrentTemp ;
+    mqto:rest ex:AdjustMeltTemp_List2 .
+
+ex:AdjustMeltTemp_List2 a mqto:List ;
+    mqto:first ex:AdjustFurnaceSetpoint ;
+    mqto:rest ex:AdjustMeltTemp_List3 .
+
+ex:AdjustMeltTemp_List3 a mqto:List ;
+    mqto:first ex:VerifyNewTemp ;
+    mqto:rest mqto:nil .
+
+# CheckCurrentTemp is reused here — the same step instance appears in both
+# AdjustMeltTemp (as step 1 of 3) and VerifyThermocouple (as step 1 of 3).
+# This is the key benefit of the mqto:List pattern: step order lives in
+# the list, not in the step, so one step can serve multiple procedures.
+ex:VerifyThermocouple_List1 a mqto:List ;
+    mqto:first ex:CheckCurrentTemp ;
+    mqto:rest ex:VerifyThermocouple_List2 .
+
+ex:VerifyThermocouple_List2 a mqto:List ;
+    mqto:first ex:InspectThermocouple ;
+    mqto:rest ex:VerifyThermocouple_List3 .
+
+ex:VerifyThermocouple_List3 a mqto:List ;
+    mqto:first ex:CalibrateIfNeeded ;
+    mqto:rest mqto:nil .
+
+ex:IncreaseSlowShot_List1 a mqto:List ;
+    mqto:first ex:ReviewInjectionProfile ;
+    mqto:rest ex:IncreaseSlowShot_List2 .
+
+ex:IncreaseSlowShot_List2 a mqto:List ;
+    mqto:first ex:AdjustSlowShotDuration ;
+    mqto:rest mqto:nil .
+
+# ReplaceAlloyBatch reuses CheckCurrentTemp (step reuse across 3 procedures now)
+ex:ReplaceAlloyBatch_List1 a mqto:List ;
+    mqto:first ex:CheckCurrentTemp ;
+    mqto:rest ex:ReplaceAlloyBatch_List2 .
+
+ex:ReplaceAlloyBatch_List2 a mqto:List ;
+    mqto:first ex:SwapAlloyBatch ;
+    mqto:rest ex:ReplaceAlloyBatch_List3 .
+
+ex:ReplaceAlloyBatch_List3 a mqto:List ;
+    mqto:first ex:VerifyNewTemp ;
+    mqto:rest mqto:nil .
+
+# Countermeasures
+ex:AdjustMeltTemp a mqto:Countermeasure ;
+    rdfs:label "Adjust melt holding temperature to alloy specification"@en ;
+    mqto:mitigates ex:Porosity , ex:MeltTempTooHigh ;
+    mqto:hasStepList ex:AdjustMeltTemp_List1 ;
+    mqto:weight 90 ;
+    lis:hasParticipant ex:DieCastingCell .
+
+ex:VerifyThermocouple a mqto:Countermeasure ;
+    rdfs:label "Verify thermocouple calibration on furnace"@en ;
+    mqto:mitigates ex:Porosity ;
+    mqto:hasStepList ex:VerifyThermocouple_List1 ;
+    mqto:weight 70 .
+
+ex:IncreaseSlowShot a mqto:Countermeasure ;
+    rdfs:label "Increase slow-shot phase duration"@en ;
+    mqto:mitigates ex:Porosity , ex:ColdShut ;
+    mqto:hasStepList ex:IncreaseSlowShot_List1 ;
+    mqto:weight 50 .
+
+# Countermeasure with Material and Manpower participants (not just Machine)
+ex:ReplaceAlloyBatch a mqto:Countermeasure ;
+    rdfs:label "Replace contaminated alloy batch"@en ;
+    mqto:mitigates ex:AlloyContamination ;
+    mqto:hasStepList ex:ReplaceAlloyBatch_List1 ;
+    mqto:weight 85 ;
+    lis:hasParticipant ex:AluminiumAlloy , ex:Operator .
+
+
+# =============================================================================
+# ACTUAL LAYER
+# =============================================================================
+
+# --- Physical Items -----------------------------------------------------------
+
+ex:Machine4115 a mqto:PhysicalMachine ;
+    rdfs:label "Machine 4115"@en ;
+    lis:implements ex:DieCastingCell ;
+    mqto:identifier "4115" .
+
+ex:AlBatch2026_0042 a mqto:PhysicalMaterial ;
+    rdfs:label "Aluminium batch AL-2026-0042"@en ;
+    lis:implements ex:AluminiumAlloy ;
+    mqto:identifier "AL-2026-0042" .
+
+ex:AlBatch2026_0043 a mqto:PhysicalMaterial ;
+    rdfs:label "Aluminium batch AL-2026-0043"@en ;
+    lis:implements ex:AluminiumAlloy ;
+    mqto:identifier "AL-2026-0043" .
+
+# --- Process Executions -------------------------------------------------------
+
+ex:Process1234 a mqto:ProcessExecution ;
+    rdfs:label "Process execution 1234"@en ;
+    lis:implements ex:DieCastingProcess ;
+    lis:hasParticipant ex:Machine4115 , ex:AlBatch2026_0042 ;
+    mqto:startTime "2026-03-15T08:00:00"^^xsd:dateTime ;
+    mqto:endTime "2026-03-15T16:00:00"^^xsd:dateTime .
+
+ex:Process1235 a mqto:ProcessExecution ;
+    rdfs:label "Process execution 1235"@en ;
+    lis:implements ex:DieCastingProcess ;
+    lis:hasParticipant ex:Machine4115 , ex:AlBatch2026_0042 ;
+    mqto:startTime "2026-03-16T08:00:00"^^xsd:dateTime ;
+    mqto:endTime "2026-03-16T16:00:00"^^xsd:dateTime .
+
+ex:Process1236 a mqto:ProcessExecution ;
+    rdfs:label "Process execution 1236"@en ;
+    lis:implements ex:DieCastingProcess ;
+    lis:hasParticipant ex:Machine4115 , ex:AlBatch2026_0043 ;
+    mqto:startTime "2026-03-17T08:00:00"^^xsd:dateTime ;
+    mqto:endTime "2026-03-17T16:00:00"^^xsd:dateTime .
+
+# --- Observable Properties (actual-layer counterparts of Signals) -------------
+
+ex:Machine4115_MeltTemp a mqto:ObservableProperty ;
+    rdfs:label "Melt temperature of Machine 4115"@en ;
+    lis:implements ex:MeltTemperatureSignal ;
+    ssn:isPropertyOf ex:Machine4115 .
+
+ex:Machine4115_InjPressure a mqto:ObservableProperty ;
+    rdfs:label "Injection pressure of Machine 4115"@en ;
+    lis:implements ex:InjectionPressureSignal ;
+    ssn:isPropertyOf ex:Machine4115 .
+
+ex:Machine4115_CycleTime a mqto:ObservableProperty ;
+    rdfs:label "Cycle time of Machine 4115"@en ;
+    lis:implements ex:CycleTimeSignal ;
+    ssn:isPropertyOf ex:Machine4115 .
+
+# --- Observable Property on Material (not Machine) ----------------------------
+
+ex:AlBatch2026_0043_Impurity a mqto:ObservableProperty ;
+    rdfs:label "Impurity level of batch AL-2026-0043"@en ;
+    lis:implements ex:ImpurityLevelSignal ;
+    ssn:isPropertyOf ex:AlBatch2026_0043 .
+
+# --- Actuable Property (actual-layer counterpart of setpoint Signal) ----------
+
+ex:Machine4115_FurnaceSetpoint a mqto:ActuableProperty ;
+    rdfs:label "Furnace setpoint of Machine 4115"@en ;
+    lis:implements ex:FurnaceSetpointSignal ;
+    ssn:isPropertyOf ex:Machine4115 .
+
+# --- Observations and Results -------------------------------------------------
+
+# Temperature observations
+ex:Obs001 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:observedProperty ex:Machine4115_MeltTemp ;
+    sosa:usedProcedure ex:TemperatureMeasurement ;
+    sosa:resultTime "2026-03-15T09:55:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 721.5 ;
+    sosa:hasResult ex:Result001 .
+
+ex:Result001 a mqto:Result , qudt:QuantityValue ;
+    ex:temperature 721.5 ;
+    qudt:numericValue 721.5 ;
+    qudt:unit unit:DEG_C .
+
+ex:Obs002 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:observedProperty ex:Machine4115_MeltTemp ;
+    sosa:resultTime "2026-03-15T09:57:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 719.2 ;
+    sosa:hasResult ex:Result002 .
+
+ex:Result002 a mqto:Result ;
+    ex:temperature 719.2 .
+
+ex:Obs003 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:observedProperty ex:Machine4115_MeltTemp ;
+    sosa:resultTime "2026-03-15T09:59:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 718.3 ;
+    sosa:hasResult ex:Result003 .
+
+ex:Result003 a mqto:Result ;
+    ex:temperature 718.3 .
+
+ex:Obs004 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:observedProperty ex:Machine4115_MeltTemp ;
+    sosa:resultTime "2026-03-15T13:55:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 705.1 ;
+    sosa:hasResult ex:Result004 .
+
+ex:Result004 a mqto:Result ;
+    ex:temperature 705.1 .
+
+# PLC cycle observations — multi-value Results demonstrating resultProperty pattern
+# A single PLC cycle produces one Result carrying temperature, pressure, and cycle
+# time together. Different Metrics select their value via mqto:resultProperty:
+#   TemperatureDeviation  → resultProperty → ex:temperature
+#   InjectionPressurePeak → resultProperty → ex:pressure
+#   CycleTimeVariance     → resultProperty → ex:cycleTime
+
+ex:Obs005 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:observedProperty ex:Machine4115_InjPressure ;
+    sosa:resultTime "2026-03-15T10:02:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 1085.0 ;
+    sosa:hasResult ex:Result_Shot042 .
+
+ex:Obs006 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:observedProperty ex:Machine4115_InjPressure ;
+    sosa:resultTime "2026-03-15T10:04:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 1042.3 ;
+    sosa:hasResult ex:Result_Shot043 .
+
+# Multi-value Results: one Result per PLC cycle, multiple data properties each
+ex:Result_Shot042 a mqto:Result ;
+    ex:temperature 719.8 ;
+    ex:pressure 1085.0 ;
+    ex:cycleTime 23.9 .
+
+ex:Result_Shot043 a mqto:Result ;
+    ex:temperature 718.1 ;
+    ex:pressure 1042.3 ;
+    ex:cycleTime 24.2 .
+
+# Temperature observation for process-level assessment
+ex:Obs007 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:observedProperty ex:Machine4115_MeltTemp ;
+    sosa:resultTime "2026-03-15T15:50:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 722.5 ;
+    sosa:hasResult ex:Result007 .
+
+ex:Result007 a mqto:Result ;
+    ex:temperature 722.5 .
+
+# Cycle time observation
+ex:Obs008 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:observedProperty ex:Machine4115_CycleTime ;
+    sosa:resultTime "2026-03-16T08:55:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 24.7 ;
+    sosa:hasResult ex:Result008 .
+
+ex:Result008 a mqto:Result ;
+    ex:cycleTime 24.7 .
+
+# Temperature observations for day 3
+ex:Obs009 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:observedProperty ex:Machine4115_MeltTemp ;
+    sosa:resultTime "2026-03-17T10:55:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 725.8 ;
+    sosa:hasResult ex:Result009 .
+
+ex:Result009 a mqto:Result ;
+    ex:temperature 725.8 .
+
+ex:Obs010 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:observedProperty ex:Machine4115_MeltTemp ;
+    sosa:resultTime "2026-03-17T10:58:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 723.4 ;
+    sosa:hasResult ex:Result010 .
+
+ex:Result010 a mqto:Result ;
+    ex:temperature 723.4 .
+
+# --- Observation on Material (not Machine) — lab test, no hasSimpleResult -----
+# Demonstrates: FeatureOfInterest can be PhysicalMaterial, not just PhysicalMachine;
+# sosa:hasSimpleResult is optional (CQ-07 uses OPTIONAL for it).
+
+ex:Obs011 a mqto:Observation , sosa:Observation ;
+    sosa:hasFeatureOfInterest ex:AlBatch2026_0043 ;
+    sosa:observedProperty ex:AlBatch2026_0043_Impurity ;
+    sosa:resultTime "2026-03-17T07:00:00"^^xsd:dateTime ;
+    sosa:hasResult ex:Result011 .
+
+ex:Result011 a mqto:Result ;
+    ex:impurityPct 0.62 .
+
+# --- Actuation (setpoint change during countermeasure execution) --------------
+# Demonstrates mqto:DataEvent bridging both Observations and Actuations.
+# This actuation was performed as part of CE_001 (AdjustMeltTemp countermeasure):
+# the furnace setpoint was lowered from 720 to 710°C.
+
+ex:Act001 a mqto:Actuation , sosa:Actuation ;
+    sosa:hasFeatureOfInterest ex:Machine4115 ;
+    sosa:actsOnProperty ex:Machine4115_FurnaceSetpoint ;
+    sosa:resultTime "2026-03-15T10:50:00"^^xsd:dateTime ;
+    sosa:hasSimpleResult 710.0 ;
+    sosa:hasResult ex:Result_Act001 .
+
+ex:Result_Act001 a mqto:Result ;
+    ex:temperature 710.0 .
+
+# --- Metric Assessments -------------------------------------------------------
+
+ex:MA_001 a mqto:MetricAssessment ;
+    lis:implements ex:TemperatureDeviation ;
+    mqto:calculatedFor ex:Machine4115 ;
+    mqto:calculatedValue 718.3 ;
+    mqto:assessmentValue true ;
+    mqto:calculatedTime "2026-03-15T10:00:00"^^xsd:dateTime ;
+    mqto:basedOn ex:Obs001 , ex:Obs002 , ex:Obs003 ;
+    mqto:evaluatesProperty ex:Machine4115_MeltTemp ;
+    mqto:raised ex:FO_001 .
+
+ex:MA_002 a mqto:MetricAssessment ;
+    lis:implements ex:TemperatureDeviation ;
+    mqto:calculatedFor ex:Machine4115 ;
+    mqto:calculatedValue 705.1 ;
+    mqto:assessmentValue false ;
+    mqto:calculatedTime "2026-03-15T14:00:00"^^xsd:dateTime ;
+    mqto:basedOn ex:Obs004 , ex:Act001 ;
+    mqto:evaluatesProperty ex:Machine4115_MeltTemp .
+
+# MA_002 is basedOn both Obs004 (an Observation) and Act001 (an Actuation),
+# demonstrating that DataEvent as range of basedOn covers both event types.
+
+ex:MA_003 a mqto:MetricAssessment ;
+    lis:implements ex:InjectionPressurePeak ;
+    mqto:calculatedFor ex:Machine4115 ;
+    mqto:calculatedValue 1085.0 ;
+    mqto:assessmentValue false ;
+    mqto:calculatedTime "2026-03-15T10:05:00"^^xsd:dateTime ;
+    mqto:basedOn ex:Obs005 , ex:Obs006 ;
+    mqto:evaluatesProperty ex:Machine4115_InjPressure .
+
+ex:MA_004 a mqto:MetricAssessment ;
+    lis:implements ex:TemperatureDeviation ;
+    mqto:calculatedFor ex:Process1234 ;
+    mqto:calculatedValue 722.5 ;
+    mqto:assessmentValue true ;
+    mqto:calculatedTime "2026-03-15T16:00:00"^^xsd:dateTime ;
+    mqto:basedOn ex:Obs007 ;
+    mqto:evaluatesProperty ex:Machine4115_MeltTemp ;
+    mqto:raised ex:FO_002 .
+
+ex:MA_005 a mqto:MetricAssessment ;
+    lis:implements ex:CycleTimeVariance ;
+    mqto:calculatedFor ex:Machine4115 ;
+    mqto:calculatedValue 2.1 ;
+    mqto:assessmentValue false ;
+    mqto:calculatedTime "2026-03-16T09:00:00"^^xsd:dateTime ;
+    mqto:basedOn ex:Obs008 ;
+    mqto:evaluatesProperty ex:Machine4115_CycleTime .
+
+ex:MA_006 a mqto:MetricAssessment ;
+    lis:implements ex:TemperatureDeviation ;
+    mqto:calculatedFor ex:Machine4115 ;
+    mqto:calculatedValue 725.8 ;
+    mqto:assessmentValue true ;
+    mqto:calculatedTime "2026-03-17T11:00:00"^^xsd:dateTime ;
+    mqto:basedOn ex:Obs009 , ex:Obs010 ;
+    mqto:evaluatesProperty ex:Machine4115_MeltTemp ;
+    mqto:raised ex:FO_003 .
+
+# MetricAssessment for Material — calculatedFor PhysicalMaterial, not Machine
+ex:MA_007 a mqto:MetricAssessment ;
+    lis:implements ex:ImpurityLevel ;
+    mqto:calculatedFor ex:AlBatch2026_0043 ;
+    mqto:calculatedValue 0.62 ;
+    mqto:assessmentValue true ;
+    mqto:calculatedTime "2026-03-17T07:15:00"^^xsd:dateTime ;
+    mqto:basedOn ex:Obs011 ;
+    mqto:evaluatesProperty ex:AlBatch2026_0043_Impurity ;
+    mqto:raised ex:FO_005 .
+
+# --- Failure Occurrences ------------------------------------------------------
+
+ex:FO_001 a mqto:FailureOccurrence ;
+    lis:implements ex:Porosity ;
+    mqto:appearedOn ex:Machine4115 ;
+    mqto:raisedBy ex:MA_001 ;
+    mqto:occurrenceTime "2026-03-15T10:01:00"^^xsd:dateTime .
+
+ex:FO_002 a mqto:FailureOccurrence ;
+    lis:implements ex:GasPorosity ;
+    mqto:appearedOn ex:Machine4115 ;
+    mqto:raisedBy ex:MA_004 ;
+    mqto:occurrenceTime "2026-03-15T16:01:00"^^xsd:dateTime .
+
+ex:FO_003 a mqto:FailureOccurrence ;
+    lis:implements ex:Porosity ;
+    mqto:appearedOn ex:Machine4115 ;
+    mqto:raisedBy ex:MA_006 ;
+    mqto:occurrenceTime "2026-03-17T11:01:00"^^xsd:dateTime .
+
+ex:FO_004 a mqto:FailureOccurrence ;
+    lis:implements ex:ColdShut ;
+    mqto:appearedOn ex:Machine4115 ;
+    mqto:occurrenceTime "2026-03-20T09:30:00"^^xsd:dateTime .
+
+# Failure appeared on PhysicalMaterial (not Machine) — raised by material metric
+ex:FO_005 a mqto:FailureOccurrence ;
+    lis:implements ex:AlloyContamination ;
+    mqto:appearedOn ex:AlBatch2026_0043 ;
+    mqto:raisedBy ex:MA_007 ;
+    mqto:occurrenceTime "2026-03-17T07:30:00"^^xsd:dateTime .
+
+# --- Countermeasure Executions ------------------------------------------------
+
+ex:CE_001 a mqto:CountermeasureExecution ;
+    lis:implements ex:AdjustMeltTemp ;
+    mqto:mitigated ex:FO_001 ;
+    mqto:suggestedBy ex:FO_001 ;
+    mqto:startTime "2026-03-15T10:30:00"^^xsd:dateTime ;
+    mqto:endTime "2026-03-15T11:20:00"^^xsd:dateTime ;
+    mqto:score 0.92 ;
+    pko:includesStepExecution ex:CSE_001 , ex:CSE_002 , ex:CSE_003 .
+
+ex:CE_002 a mqto:CountermeasureExecution ;
+    lis:implements ex:VerifyThermocouple ;
+    mqto:suggestedBy ex:FO_003 ;
+    mqto:startTime "2026-03-17T11:30:00"^^xsd:dateTime ;
+    mqto:abortedTime "2026-03-17T12:00:00"^^xsd:dateTime ;
+    mqto:abortedReason "Thermocouple within calibration limits; no adjustment needed." ;
+    mqto:score 0.75 ;
+    pko:includesStepExecution ex:CSE_006 , ex:CSE_004 , ex:CSE_005 .
+
+# --- Countermeasure Step Executions -------------------------------------------
+
+ex:CSE_001 a mqto:CountermeasureStepExecution ;
+    lis:implements ex:CheckCurrentTemp ;
+    mqto:completionTime "2026-03-15T10:35:00"^^xsd:dateTime ;
+    pko:nextStepExecution ex:CSE_002 .
+
+ex:CSE_002 a mqto:CountermeasureStepExecution ;
+    lis:implements ex:AdjustFurnaceSetpoint ;
+    mqto:completionTime "2026-03-15T10:50:00"^^xsd:dateTime ;
+    pko:previousStepExecution ex:CSE_001 ;
+    pko:nextStepExecution ex:CSE_003 .
+
+ex:CSE_003 a mqto:CountermeasureStepExecution ;
+    lis:implements ex:VerifyNewTemp ;
+    mqto:completionTime "2026-03-15T11:20:00"^^xsd:dateTime ;
+    pko:previousStepExecution ex:CSE_002 .
+
+# CSE_006 implements CheckCurrentTemp — the same step specification that
+# CSE_001 (in CE_001) also implements. This demonstrates step reuse across
+# different countermeasure executions.
+ex:CSE_006 a mqto:CountermeasureStepExecution ;
+    lis:implements ex:CheckCurrentTemp ;
+    mqto:completionTime "2026-03-17T11:35:00"^^xsd:dateTime ;
+    pko:nextStepExecution ex:CSE_004 .
+
+ex:CSE_004 a mqto:CountermeasureStepExecution ;
+    lis:implements ex:InspectThermocouple ;
+    mqto:completionTime "2026-03-17T11:45:00"^^xsd:dateTime ;
+    pko:previousStepExecution ex:CSE_006 ;
+    pko:nextStepExecution ex:CSE_005 .
+
+ex:CSE_005 a mqto:CountermeasureStepExecution ;
+    lis:implements ex:CalibrateIfNeeded ;
+    mqto:abortedTime "2026-03-17T12:00:00"^^xsd:dateTime ;
+    mqto:abortedReason "Not needed — thermocouple readings within tolerance." ;
+    pko:previousStepExecution ex:CSE_004 .
+
+# --- Domain-specific data properties (used in Results via resultProperty) -----
+
+ex:temperature a owl:DatatypeProperty ;
+    rdfs:label "temperature"@en .
+
+ex:pressure a owl:DatatypeProperty ;
+    rdfs:label "pressure"@en .
+
+ex:cycleTime a owl:DatatypeProperty ;
+    rdfs:label "cycle time"@en .
+
+ex:impurityPct a owl:DatatypeProperty ;
+    rdfs:label "impurity percentage"@en .
