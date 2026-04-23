@@ -24,29 +24,29 @@ MQTO builds upon these standards while adding manufacturing quality troubleshoot
 MQTO is designed as a **domain-independent connector ontology** applicable across manufacturing processes (die-casting, injection molding, machining, assembly, etc.) with the following goals:
 
 1. **Structured Root Cause Analysis**: Implement Ishikawa (fishbone) diagram semantics with the 5M categories (Machine, Manpower, Material, Measurement, Method)
-2. **Specified/Actual Layering**: Separate reusable knowledge (failure types, metrics, procedures) from runtime data (observations, occurrences, executions)
+2. **Specified/Actual levels**: Separate reusable knowledge (failure types, metrics, procedures) from runtime data (observations, occurrences, executions)
 3. **Observation Integration**: Bridge abstract metrics to concrete sensor data through Signal entities as data channels
 4. **Procedural Countermeasures**: Model remediation procedures with externalized step ordering for reusability across different contexts
 
 **Intentional scope decisions:**
-- Support five M's (Machine, Manpower, Material, Measurement, Method); actual-layer representations for Manpower and Measurement are delegated to domain ontologies
+- Support five M's (Machine, Manpower, Material, Measurement, Method); actual-level representations for Manpower and Measurement are delegated to domain ontologies
 - Use ordinal probability categories (weak/moderate/strong) rather than numeric probabilities for practical applicability
 - Provide ranking weights but leave ranking algorithms to external systems
 - Remain unit-agnostic, allowing downstream ontologies to adopt QUDT, OM, or domain-specific unit standards
 
 ### Architecture Overview
 
-MQTO follows a **two-layer architecture**:
+MQTO follows a **two-level architecture**:
 
-**Specified Layer** (schema-level, reusable knowledge):
+**Specified level** (schema-level, reusable knowledge):
 - `IshikawaItem` → `FailureMode` → `Metric` → `Signal` (data channel)
-- `Countermeasure` → `CountermeasureStep` (with externalized `List` ordering)
+- `Countermeasure` → `CountermeasureStep` (with externalized `CountermeasureStepList` ordering)
 
-**Actual Layer** (instance-level, runtime data):
+**Actual level** (instance-level, runtime data):
 - `ActualIshikawaItem` → `FailureOccurrence` → `MetricAssessment` → `Observation` (SOSA)
 - `CountermeasureExecution` → `CountermeasureStepExecution` (PROV)
 
-The **Signal concept** is central: it represents a specific data channel (PLC variable, sensor reading, control signal) that bridges the specified layer (Metric calculations read from Signals) and the actual layer (Observations measure ObservableProperties).
+The **Signal concept** is central: it represents a specific data channel (PLC variable, sensor reading, control signal) that bridges the specified level (Metric calculations read from Signals) and the actual level (Observations measure ObservableProperties).
 
 ### Use Case
 
