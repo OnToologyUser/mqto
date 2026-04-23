@@ -28,9 +28,9 @@
                                              <https://orcid.org/0000-0003-3445-0504> ;
                          dcterms:created "2026-03-17"^^xsd:date ;
                          dcterms:creator <https://orcid.org/0000-0001-9521-8907> ;
-                         dcterms:description "A generalised ontology for manufacturing quality troubleshooting, applicable across different manufacturing domains. Covers both the specified (schema-level) and actual (instance-level) layers of a manufacturing process, with a focus on root cause analysis, failure diagnosis, and countermeasure recommendation."@en ;
+                         dcterms:description "A connector ontology for manufacturing quality troubleshooting that bridges three layers: quality management (FailureMode, Countermeasure, Metric), production context (IshikawaItem hierarchy, ActualIshikawaItem hierarchy), and data infrastructure (Signal, Property, DataEvent). Applicable across manufacturing domains. Covers both the specified (schema-level) and actual (instance-level) layers, with a focus on root cause analysis, failure diagnosis, and countermeasure recommendation."@en ;
                          dcterms:license <http://www.apache.org/licenses/LICENSE-2.0> ;
-                         dcterms:modified "2026-04-22"^^xsd:date ;
+                         dcterms:modified "2026-04-23"^^xsd:date ;
                          dcterms:publisher <https://github.com/dg-assist> ;
                          dcterms:rights "Copyright 2026 DG Assist. Licensed under the Apache License, Version 2.0."@en ;
                          dcterms:subject "Industry 4.0"@en ,
@@ -354,7 +354,7 @@ mqto:suggested rdf:type owl:ObjectProperty ;
                owl:inverseOf mqto:suggestedBy ;
                rdfs:domain mqto:FailureOccurrence ;
                rdfs:range mqto:CountermeasureExecution ;
-               rdfs:comment "A failure occurrence suggested a countermeasure execution."@en ;
+               rdfs:comment "Links a FailureOccurrence to a CountermeasureExecution that was recommended in response to it (actual layer). Captures the decision to apply a countermeasure following a detected failure. Inverse of suggestedBy. Distinct from mqto:mitigatedOccurrence, which records that a countermeasure execution actually resolved the failure."@en ;
                rdfs:label "suggested"@en .
 
 
@@ -362,7 +362,7 @@ mqto:suggested rdf:type owl:ObjectProperty ;
 mqto:suggestedBy rdf:type owl:ObjectProperty ;
                  rdfs:domain mqto:CountermeasureExecution ;
                  rdfs:range mqto:FailureOccurrence ;
-                 rdfs:comment "A countermeasure execution was suggested by a failure occurrence."@en ;
+                 rdfs:comment "Links a CountermeasureExecution to the FailureOccurrence that triggered its recommendation (actual layer). Inverse of suggested. Distinct from mqto:mitigatedByExecution, which links a FailureOccurrence to the CountermeasureExecution that actually resolved it."@en ;
                  rdfs:label "suggested by"@en .
 
 
@@ -540,7 +540,7 @@ mqto:ActualIshikawaItem rdf:type owl:Class ;
 mqto:Actuation rdf:type owl:Class ;
                rdfs:subClassOf sosa:Actuation ,
                                mqto:DataEvent ;
-               rdfs:comment "Subclass of sosa:Actuation, representing a single actuation event that changes the state of an ActuatableProperty of an ActualIshikawaItem. As a subclass of mqto:DataEvent, actuation events can serve as the basis for MetricAssessments alongside Observations."@en ;
+               rdfs:comment "Subclass of sosa:Actuation, representing a single actuation event that changes the state of an ActuableProperty of an ActualIshikawaItem. As a subclass of mqto:DataEvent, actuation events can serve as the basis for MetricAssessments alongside Observations."@en ;
                rdfs:label "Actuation"@en .
 
 
@@ -566,7 +566,7 @@ mqto:Countermeasure rdf:type owl:Class ;
                                       owl:onProperty mqto:mitigates ;
                                       owl:allValuesFrom mqto:FailureMode
                                     ] ;
-                    rdfs:comment "A remediation procedure that mitigates one or more Failure Modes. Countermeasures are structured as ordered sequences of CountermeasureSteps, represented via the mqto:CountermeasureStepList pattern for reusability. As a subclass of pko:Procedure, countermeasures align with the Procedural Knowledge Ontology's procedure modeling patterns while maintaining integration with the LIS specified/actual architecture."@en ;
+                    rdfs:comment "A remediation procedure that mitigates one or more Failure Modes. Countermeasures are structured as ordered sequences of CountermeasureSteps, represented via the mqto:CountermeasureStepList pattern for reusability. Participants (the IshikawaItems involved in the procedure) are restricted to Machine, Manpower, and Material via lis:hasParticipant. As a subclass of pko:Procedure, countermeasures align with the Procedural Knowledge Ontology's procedure modeling patterns while maintaining integration with the LIS specified/actual architecture."@en ;
                     rdfs:label "Countermeasure"@en .
 
 
@@ -591,7 +591,7 @@ mqto:CountermeasureExecution rdf:type owl:Class ;
                                                owl:onProperty pko:includesStepExecution ;
                                                owl:allValuesFrom mqto:CountermeasureStepExecution
                                              ] ;
-                             rdfs:comment "The actual execution of a Countermeasure procedure, performed to mitigate one or more FailureOccurrences. As a subclass of both lis:Activity and lis:Actual, it is a concrete temporal event that implements a Countermeasure specification. Links to the Countermeasure via lis:implements, records mitigated FailureOccurrences via mqto:mitigatedOccurrence, and tracks constituent steps via pko:includesStepExecution. Step sequencing uses pko:nextStepExecution and pko:previousStepExecution inherited from pko:ProcedureExecution. As a subclass of pko:ProcedureExecution, countermeasure executions align with PKO's procedure execution model."@en ;
+                             rdfs:comment "The actual execution of a Countermeasure procedure, performed to mitigate one or more FailureOccurrences. As a subclass of both lis:Activity and lis:Actual, it is a concrete temporal event that implements a Countermeasure specification. Links to the Countermeasure via lis:implements, records mitigated FailureOccurrences via mqto:mitigatedOccurrence, records the triggering FailureOccurrence via mqto:suggestedBy, and tracks constituent steps via pko:includesStepExecution. Step sequencing uses pko:nextStepExecution and pko:previousStepExecution inherited from pko:ProcedureExecution. As a subclass of pko:ProcedureExecution, countermeasure executions align with PKO's procedure execution model."@en ;
                              rdfs:label "Countermeasure Execution"@en .
 
 
@@ -695,7 +695,7 @@ mqto:IshikawaItem rdf:type owl:Class ;
                                     owl:onProperty mqto:providesSignal ;
                                     owl:allValuesFrom mqto:Signal
                                   ] ;
-                  rdfs:comment "Abstract superclass for the five categories of root causes in an Ishikawa (fishbone) diagram: Machine, Manpower, Material, Measurement, and Method. Domain-specific ontologies can specialize these concepts for their manufacturing domain."@en ;
+                  rdfs:comment "Abstract superclass for the five categories of root causes in an Ishikawa (fishbone) diagram: Machine, Manpower, Material, Measurement, and Method. Each IshikawaItem can have associated FailureModes (via hasFailure), diagnostic Metrics (via hasMetric), and data channels (via providesSignal). Domain-specific ontologies can specialize these concepts for their manufacturing domain."@en ;
                   rdfs:label "Ishikawa Item"@en .
 
 
@@ -771,7 +771,7 @@ mqto:MethodExecution rdf:type owl:Class ;
                                        owl:onProperty lis:implements ;
                                        owl:someValuesFrom mqto:Method
                                      ] ;
-                     rdfs:comment "Actual execution of a Method, the instance-layer counterpart of Method. This represents actual production operations with specific machines, material batches, timestamps, and observation data. Note: MethodExecution does not subclass lis:Activity (lis:Temporal) because it subclasses ActualIshikawaItem, which inherits sosa:FeatureOfInterest (lis:Object). In LIS, lis:Temporal and lis:Object are disjoint top-level categories, so both superclasses together would make the class unsatisfiable. As a consequence, lis:hasParticipant and lis:hasActivityPart cannot be used on MethodExecution (their domain is lis:Activity). Participant links are expressed instead via the inverse: PhysicalMachine and PhysicalMaterial carry lis:participantIn restrictions pointing to MethodExecution. The temporal character is expressed through mqto:startTime / mqto:endTime. This asymmetry is expected to be resolved once the SOSA/SSN update and the SOSA-IDO alignment are published."@en ;
+                     rdfs:comment "Actual execution of a Method, the instance-layer counterpart of Method. This represents actual production operations with specific machines, material batches, timestamps, and observation data. Note: MethodExecution does not subclass lis:Activity (lis:Temporal) because it subclasses ActualIshikawaItem, which inherits sosa:FeatureOfInterest (lis:Object). In LIS, lis:Temporal and lis:Object are disjoint top-level categories, so both superclasses together would make the class unsatisfiable. As a consequence, lis:hasParticipant and lis:hasActivityPart cannot be used on MethodExecution (their domain is lis:Activity). Participant links are instead expressed from the participant side: PhysicalMachine and PhysicalMaterial instances are expected to use lis:participantIn to point to the MethodExecution they participate in. The temporal character is expressed through mqto:startTime / mqto:endTime. This asymmetry is expected to be resolved once the SOSA/SSN update and the SOSA-IDO alignment are published."@en ;
                      rdfs:label "Method Execution"@en .
 
 
@@ -840,7 +840,7 @@ mqto:ObservableProperty rdf:type owl:Class ;
 mqto:Observation rdf:type owl:Class ;
                  rdfs:subClassOf sosa:Observation ,
                                  mqto:DataEvent ;
-                 rdfs:comment "Subclass of sosa:Observation, representing a single sensor reading or measurement event. Links to an ActualIshikawaItem (feature of interest), an ObservableProperty (what is being measured), and a Result (the measured value). Observations capture time-series data from PLCs, sensors, and SCADA systems including temperature readings, pressure measurements, and cycle times."@en ;
+                 rdfs:comment "Subclass of both sosa:Observation and mqto:DataEvent, representing a single sensor reading or measurement event. As a DataEvent, it can serve as the basis for a MetricAssessment via mqto:basedOn. Links to an ActualIshikawaItem (feature of interest), an ObservableProperty (what is being measured), and a Result (the measured value). Observations capture time-series data from PLCs, sensors, and SCADA systems including temperature readings, pressure measurements, and cycle times."@en ;
                  rdfs:label "Observation"@en .
 
 
@@ -948,6 +948,7 @@ mqto:Signal rdf:type owl:Class ;
 ###  https://w3id.org/mqto#nil
 mqto:nil rdf:type owl:NamedIndividual ,
                   mqto:CountermeasureStepList ;
+         rdfs:comment "The empty-list terminator for mqto:CountermeasureStepList, analogous to rdf:nil. Every well-formed step list must have its final node's mqto:rest pointing to this individual."@en ;
          rdfs:label "nil"@en .
 
 
