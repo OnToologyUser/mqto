@@ -20,7 +20,7 @@
 
 
 # =============================================================================
-# SPECIFIED LAYER
+# SPECIFIED LEVEL
 # =============================================================================
 
 # --- IshikawaItems (5 M's) ---------------------------------------------------
@@ -219,52 +219,52 @@ ex:SwapAlloyBatch a mqto:CountermeasureStep ;
     rdfs:label "Swap alloy batch"@en .
 
 # List structures for step ordering
-ex:AdjustMeltTemp_List1 a mqto:List ;
+ex:AdjustMeltTemp_List1 a mqto:CountermeasureStepList ;
     mqto:first ex:CheckCurrentTemp ;
     mqto:rest ex:AdjustMeltTemp_List2 .
 
-ex:AdjustMeltTemp_List2 a mqto:List ;
+ex:AdjustMeltTemp_List2 a mqto:CountermeasureStepList ;
     mqto:first ex:AdjustFurnaceSetpoint ;
     mqto:rest ex:AdjustMeltTemp_List3 .
 
-ex:AdjustMeltTemp_List3 a mqto:List ;
+ex:AdjustMeltTemp_List3 a mqto:CountermeasureStepList ;
     mqto:first ex:VerifyNewTemp ;
     mqto:rest mqto:nil .
 
 # CheckCurrentTemp is reused here — the same step instance appears in both
 # AdjustMeltTemp (as step 1 of 3) and VerifyThermocouple (as step 1 of 3).
-# This is the key benefit of the mqto:List pattern: step order lives in
+# This is the key benefit of the mqto:CountermeasureStepList pattern: step order lives in
 # the list, not in the step, so one step can serve multiple procedures.
-ex:VerifyThermocouple_List1 a mqto:List ;
+ex:VerifyThermocouple_List1 a mqto:CountermeasureStepList ;
     mqto:first ex:CheckCurrentTemp ;
     mqto:rest ex:VerifyThermocouple_List2 .
 
-ex:VerifyThermocouple_List2 a mqto:List ;
+ex:VerifyThermocouple_List2 a mqto:CountermeasureStepList ;
     mqto:first ex:InspectThermocouple ;
     mqto:rest ex:VerifyThermocouple_List3 .
 
-ex:VerifyThermocouple_List3 a mqto:List ;
+ex:VerifyThermocouple_List3 a mqto:CountermeasureStepList ;
     mqto:first ex:CalibrateIfNeeded ;
     mqto:rest mqto:nil .
 
-ex:IncreaseSlowShot_List1 a mqto:List ;
+ex:IncreaseSlowShot_List1 a mqto:CountermeasureStepList ;
     mqto:first ex:ReviewInjectionProfile ;
     mqto:rest ex:IncreaseSlowShot_List2 .
 
-ex:IncreaseSlowShot_List2 a mqto:List ;
+ex:IncreaseSlowShot_List2 a mqto:CountermeasureStepList ;
     mqto:first ex:AdjustSlowShotDuration ;
     mqto:rest mqto:nil .
 
 # ReplaceAlloyBatch reuses CheckCurrentTemp (step reuse across 3 procedures now)
-ex:ReplaceAlloyBatch_List1 a mqto:List ;
+ex:ReplaceAlloyBatch_List1 a mqto:CountermeasureStepList ;
     mqto:first ex:CheckCurrentTemp ;
     mqto:rest ex:ReplaceAlloyBatch_List2 .
 
-ex:ReplaceAlloyBatch_List2 a mqto:List ;
+ex:ReplaceAlloyBatch_List2 a mqto:CountermeasureStepList ;
     mqto:first ex:SwapAlloyBatch ;
     mqto:rest ex:ReplaceAlloyBatch_List3 .
 
-ex:ReplaceAlloyBatch_List3 a mqto:List ;
+ex:ReplaceAlloyBatch_List3 a mqto:CountermeasureStepList ;
     mqto:first ex:VerifyNewTemp ;
     mqto:rest mqto:nil .
 
@@ -298,7 +298,7 @@ ex:ReplaceAlloyBatch a mqto:Countermeasure ;
 
 
 # =============================================================================
-# ACTUAL LAYER
+# ACTUAL LEVEL
 # =============================================================================
 
 # --- Physical Items -----------------------------------------------------------
@@ -320,26 +320,29 @@ ex:AlBatch2026_0043 a mqto:PhysicalMaterial ;
 
 # --- Process Executions -------------------------------------------------------
 
-ex:Process1234 a mqto:ProcessExecution ;
+ex:Process1234 a mqto:MethodExecution ;
     rdfs:label "Process execution 1234"@en ;
     lis:implements ex:DieCastingProcess ;
-    lis:hasParticipant ex:Machine4115 , ex:AlBatch2026_0042 ;
     mqto:startTime "2026-03-15T08:00:00"^^xsd:dateTime ;
     mqto:endTime "2026-03-15T16:00:00"^^xsd:dateTime .
 
-ex:Process1235 a mqto:ProcessExecution ;
+ex:Process1235 a mqto:MethodExecution ;
     rdfs:label "Process execution 1235"@en ;
     lis:implements ex:DieCastingProcess ;
-    lis:hasParticipant ex:Machine4115 , ex:AlBatch2026_0042 ;
     mqto:startTime "2026-03-16T08:00:00"^^xsd:dateTime ;
     mqto:endTime "2026-03-16T16:00:00"^^xsd:dateTime .
 
-ex:Process1236 a mqto:ProcessExecution ;
+ex:Process1236 a mqto:MethodExecution ;
     rdfs:label "Process execution 1236"@en ;
     lis:implements ex:DieCastingProcess ;
-    lis:hasParticipant ex:Machine4115 , ex:AlBatch2026_0043 ;
     mqto:startTime "2026-03-17T08:00:00"^^xsd:dateTime ;
     mqto:endTime "2026-03-17T16:00:00"^^xsd:dateTime .
+
+# Participant links expressed from the participant side (lis:participantIn)
+# because MethodExecution cannot subclass lis:Activity — see Issue 22/23.
+ex:Machine4115 lis:participantIn ex:Process1234 , ex:Process1235 , ex:Process1236 .
+ex:AlBatch2026_0042 lis:participantIn ex:Process1234 , ex:Process1235 .
+ex:AlBatch2026_0043 lis:participantIn ex:Process1236 .
 
 # --- Observable Properties (actual-layer counterparts of Signals) -------------
 
@@ -630,7 +633,7 @@ ex:FO_005 a mqto:FailureOccurrence ;
 
 ex:CE_001 a mqto:CountermeasureExecution ;
     lis:implements ex:AdjustMeltTemp ;
-    mqto:mitigated ex:FO_001 ;
+    mqto:mitigatedOccurrence ex:FO_001 ;
     mqto:suggestedBy ex:FO_001 ;
     mqto:startTime "2026-03-15T10:30:00"^^xsd:dateTime ;
     mqto:endTime "2026-03-15T11:20:00"^^xsd:dateTime ;

@@ -1,7 +1,7 @@
 # CQ-05: Which countermeasures and execution steps are associated with a failure or were carried out?
 #
-# This query retrieves countermeasures associated with a failure type (specified layer)
-# and optionally actual countermeasure executions (actual layer).
+# This query retrieves countermeasures associated with a failure type (specified level)
+# and optionally actual countermeasure executions (actual level).
 
 PREFIX mqto: <https://w3id.org/mqto#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>

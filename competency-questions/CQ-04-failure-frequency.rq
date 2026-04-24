@@ -1,7 +1,7 @@
 # CQ-04: Which failures occurred how often in a defined context?
 #
 # This query counts failure occurrences within a time range and optional context filters
-# (machine, material, process). Demonstrates the actual layer querying capability.
+# (machine, material, process). Demonstrates the actual level querying capability.
 
 PREFIX mqto: <https://w3id.org/mqto#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>

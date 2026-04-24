@@ -11,7 +11,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 SELECT ?process ?processLabel ?startTime ?endTime ?participant ?participantLabel ?participantType
 WHERE {
   # Find process executions
-  ?process a mqto:ProcessExecution ;
+  ?process a mqto:MethodExecution ;
            mqto:startTime ?startTime .
 
   OPTIONAL {
@@ -26,9 +26,10 @@ WHERE {
   FILTER(?startTime >= "2026-03-01T00:00:00"^^xsd:dateTime &&
          ?startTime <= "2026-03-31T23:59:59"^^xsd:dateTime)
 
-  # Find participants in the process
+  # Find participants via lis:participantIn from the participant side
+  # (MethodExecution cannot use lis:hasParticipant — see Issue 22/23)
   OPTIONAL {
-    ?process lis:hasParticipant ?participant .
+    ?participant lis:participantIn ?process .
     ?participant rdfs:label ?participantLabel .
 
     # Determine participant type

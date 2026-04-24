@@ -1,6 +1,6 @@
 # CQ-10: Which metrics triggered which failures?
 #
-# This query shows the actual layer causal chain: metric assessments that raised
+# This query shows the actual level causal chain: metric assessments that raised
 # failure occurrences, demonstrating the connection from quantitative data to
 # qualitative failure detection.
 
