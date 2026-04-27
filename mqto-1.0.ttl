@@ -43,6 +43,7 @@
                                          "root cause analysis"@en ,
                                          "troubleshooting"@en ;
                          dcterms:title "Manufacturing Quality Troubleshooting Ontology"@en ;
+dcterms:bibliographicCitation "Bischof, S., Rötzer, F., Xavier Parreira, J., Filtz, E. (2026). Manufacturing Quality Troubleshooting Ontology (MQTO), Version 1.0. https://w3id.org/mqto/1.0"@en ;
                          bibo:doi "10.5281/zenodo.19571023" ;
                          bibo:status <http://purl.org/ontology/bibo/status/published> ;
                          dcterms:issued "2026-04-27"^^xsd:date ;
