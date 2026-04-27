@@ -27,7 +27,7 @@
                                              <https://orcid.org/0000-0003-2661-5575> ,
                                              <https://orcid.org/0000-0003-3445-0504> ;
                          dcterms:created "2026-03-17"^^xsd:date ;
-                         cterms:creator <https://orcid.org/0000-0001-9521-8907> ;
+                         dcterms:creator <https://orcid.org/0000-0001-9521-8907> ;
                          dcterms:description "A connector ontology for manufacturing quality troubleshooting that bridges three manufacturing domains: quality management (FailureMode, Countermeasure, Metric), production context (FailureSourceCategory hierarchy, FailureSource hierarchy), and data infrastructure (Signal, Property, DataEvent). Applicable across manufacturing domains. Covers both the specified (schema-level) and actual (instance-level) levels, with a focus on root cause analysis, failure diagnosis, and countermeasure recommendation."@en ;
                          dcterms:license <http://www.apache.org/licenses/LICENSE-2.0> ;
                          dcterms:modified "2026-04-27"^^xsd:date ;
@@ -674,9 +674,8 @@ mqto:FailureOccurrence rdf:type owl:Class ;
 
 ###  https://w3id.org/mqto#FailureSource
 mqto:FailureSource rdf:type owl:Class ;
-                   rdfs:subClassOf lis:Actual ,
-                                   sosa:FeatureOfInterest ;
-                   rdfs:comment "Abstract superclass for actual/instance level counterparts of FailureSourceCategory. Integrates SOSA: each FailureSource is a FeatureOfInterest whose observations, properties, and failure occurrences are constrained at the subclass level. MQTO defines three concrete subclasses: PhysicalMachine (implements Machine), PhysicalMaterial (implements Material), and MethodExecution (implements Method). Actual-level counterparts for Manpower and Measurement are not defined in MQTO; domain-specific ontologies are expected to provide them."@en ;
+                   rdfs:subClassOf lis:Actual ;
+                   rdfs:comment "Abstract superclass for actual/instance level counterparts of FailureSourceCategory. MQTO defines three concrete subclasses: PhysicalMachine (implements Machine, sosa:FeatureOfInterest), PhysicalMaterial (implements Material, sosa:FeatureOfInterest), and MethodExecution (implements Method, lis:Activity). sosa:FeatureOfInterest is declared on the physical subclasses rather than here because MethodExecution requires lis:Activity (lis:Temporal), which is disjoint with sosa:FeatureOfInterest (lis:Object) in the ido-ssn alignment. Actual-level counterparts for Manpower and Measurement are not defined in MQTO; domain-specific ontologies are expected to provide them."@en ;
                    rdfs:label "Failure Source"@en .
 
 
@@ -766,12 +765,13 @@ mqto:Method rdf:type owl:Class ;
 
 ###  https://w3id.org/mqto#MethodExecution
 mqto:MethodExecution rdf:type owl:Class ;
-                     rdfs:subClassOf mqto:FailureSource ,
+                     rdfs:subClassOf lis:Activity ,
+                                     mqto:FailureSource ,
                                      [ rdf:type owl:Restriction ;
                                        owl:onProperty lis:implements ;
                                        owl:someValuesFrom mqto:Method
                                      ] ;
-                     rdfs:comment "Actual execution of a Method, the instance-level counterpart of Method. This represents actual production operations with specific machines, material batches, timestamps, and observation data. Note: MethodExecution does not subclass lis:Activity (lis:Temporal) because it subclasses FailureSource, which inherits sosa:FeatureOfInterest (lis:Object). In LIS, lis:Temporal and lis:Object are disjoint top-level categories, so both superclasses together would make the class unsatisfiable. As a consequence, lis:hasParticipant and lis:hasActivityPart cannot be used on MethodExecution (their domain is lis:Activity). Participant links are instead expressed from the participant side: PhysicalMachine and PhysicalMaterial instances are expected to use lis:participantIn to point to the MethodExecution they participate in. The temporal character is expressed through mqto:startTime / mqto:endTime. This asymmetry is expected to be resolved once the SOSA/SSN update and the SOSA-IDO alignment are published."@en ;
+                     rdfs:comment "Actual execution of a Method, the instance-level counterpart of Method. As a subclass of both lis:Activity and mqto:FailureSource, it represents a concrete temporal manufacturing activity that can have participants (PhysicalMachine, PhysicalMaterial) via lis:hasParticipant and sub-activities via lis:hasActivityPart. Unlike PhysicalMachine and PhysicalMaterial, MethodExecution is not a sosa:FeatureOfInterest because sosa:FeatureOfInterest maps to lis:Object in the ido-ssn alignment, which is disjoint with lis:Temporal (the superclass of lis:Activity). Observations on a MethodExecution are instead expressed indirectly through its participants."@en ;
                      rdfs:label "Method Execution"@en .
 
 
@@ -847,24 +847,26 @@ mqto:Observation rdf:type owl:Class ;
 ###  https://w3id.org/mqto#PhysicalMachine
 mqto:PhysicalMachine rdf:type owl:Class ;
                      rdfs:subClassOf lis:PhysicalArtefact ,
+                                     sosa:FeatureOfInterest ,
                                      mqto:FailureSource ,
                                      [ rdf:type owl:Restriction ;
                                        owl:onProperty lis:implements ;
                                        owl:someValuesFrom mqto:Machine
                                      ] ;
-                     rdfs:comment "Actual machine instance, the instance-level counterpart of Machine. Represents specific physical equipment with serial numbers, operational history, and sensor data. Examples include specific manufacturing equipment with serial numbers, furnaces, and robots with concrete observation data."@en ;
+                     rdfs:comment "Actual machine instance, the instance-level counterpart of Machine. As a sosa:FeatureOfInterest, it can be directly observed via sosa:Observation and have ssn:Properties. Represents specific physical equipment with serial numbers, operational history, and sensor data. Examples include specific manufacturing equipment with serial numbers, furnaces, and robots with concrete observation data."@en ;
                      rdfs:label "Physical Machine"@en .
 
 
 ###  https://w3id.org/mqto#PhysicalMaterial
 mqto:PhysicalMaterial rdf:type owl:Class ;
                       rdfs:subClassOf lis:PhysicalArtefact ,
+                                      sosa:FeatureOfInterest ,
                                       mqto:FailureSource ,
                                       [ rdf:type owl:Restriction ;
                                         owl:onProperty lis:implements ;
                                         owl:someValuesFrom mqto:Material
                                       ] ;
-                      rdfs:comment "Actual material instance, the instance-level counterpart of Material. Represents specific batches, lots, or quantities of material with identifiers, composition data, and quality measurements. Examples include specific material batches with batch numbers, chemical composition, and quality measurements."@en ;
+                      rdfs:comment "Actual material instance, the instance-level counterpart of Material. As a sosa:FeatureOfInterest, it can be directly observed via sosa:Observation and have ssn:Properties. Represents specific batches, lots, or quantities of material with identifiers, composition data, and quality measurements. Examples include specific material batches with batch numbers, chemical composition, and quality measurements."@en ;
                       rdfs:label "Physical Material"@en .
 
 
@@ -875,10 +877,6 @@ mqto:Property rdf:type owl:Class ;
                               [ rdf:type owl:Restriction ;
                                 owl:onProperty lis:implements ;
                                 owl:someValuesFrom mqto:Signal
-                              ] ,
-                              [ rdf:type owl:Restriction ;
-                                owl:onProperty ssn:isPropertyOf ;
-                                owl:allValuesFrom mqto:FailureSource
                               ] ,
                               [ rdf:type owl:Restriction ;
                                 owl:onProperty mqto:evaluatedBy ;

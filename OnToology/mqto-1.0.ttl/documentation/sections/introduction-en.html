@@ -46,6 +46,8 @@ MQTO follows a **two-level architecture**:
 - `FailureSource` → `FailureOccurrence` → `MetricAssessment` → `Observation` (SOSA)
 - `CountermeasureExecution` → `CountermeasureStepExecution` (PROV)
 
+FailureSource has three subclasses with different upper-ontology alignments: `PhysicalMachine` and `PhysicalMaterial` are `sosa:FeatureOfInterest` (observable via SOSA), while `MethodExecution` is `lis:Activity` (can have participants via `lis:hasParticipant`). This split reflects the ido-ssn constraint that `sosa:FeatureOfInterest` (→ `lis:Object`) and `lis:Activity` (→ `lis:Temporal`) are disjoint in LIS.
+
 The **Signal concept** is central: it represents a specific data channel (PLC variable, sensor reading, control signal) that bridges the specified level (Metric calculations read from Signals) and the actual level (Observations measure ObservableProperties).
 
 ### Use Case
