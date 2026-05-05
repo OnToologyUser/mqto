@@ -24,12 +24,13 @@
                          owl:imports <http://rds.posccaesar.org/ontology/lis14/ont/ido-ssn/0.1> ,
                                      <https://w3id.org/pko/1.0.0> ;
                          dcterms:abstract "The Manufacturing Quality Troubleshooting Ontology (MQTO) provides a domain-independent semantic framework for modeling manufacturing quality inspection, failure diagnosis, and countermeasure recommendation. Building on the LIS (Lifecycle Information System) specified/actual pattern and integrating SOSA/SSN observation semantics, MQTO enables structured representation of Ishikawa (fishbone) root cause analysis across five categories: Machine, Manpower, Material, Measurement, and Method. The ontology supports both schema-level knowledge (failure types, metrics, countermeasure procedures) and instance-level data (actual observations, failure occurrences, executed remediation steps), making it applicable across diverse manufacturing domains including die-casting, injection molding, machining, and assembly processes."@en ;
+                         dcterms:bibliographicCitation "Bischof, S., Rötzer, F., Xavier Parreira, J., Filtz, E. (2026). Manufacturing Quality Troubleshooting Ontology (MQTO), Version 1.0. https://w3id.org/mqto/1.0"@en ;
                          dcterms:contributor <https://orcid.org/0000-0002-3050-159X> ,
                                              <https://orcid.org/0000-0003-2661-5575> ,
                                              <https://orcid.org/0000-0003-3445-0504> ;
                          dcterms:created "2026-03-17"^^xsd:date ;
-                         dcterms:creator <https://orcid.org/0000-0001-9521-8907> ;
                          dcterms:description "A connector ontology for manufacturing quality troubleshooting that bridges three manufacturing domains: quality management (FailureMode, Countermeasure, Metric), production context (FailureSourceCategory hierarchy, FailureSource hierarchy), and data infrastructure (Signal, Property, DataEvent). Applicable across manufacturing domains. Covers both the specified (schema-level) and actual (instance-level) levels, with a focus on root cause analysis, failure diagnosis, and countermeasure recommendation."@en ;
+                         dcterms:issued "2026-04-27"^^xsd:date ;
                          dcterms:license <http://www.apache.org/licenses/LICENSE-2.0> ;
                          dcterms:modified "2026-04-27"^^xsd:date ;
                          dcterms:publisher <https://github.com/dg-assist> ;
@@ -43,19 +44,64 @@
                                          "root cause analysis"@en ,
                                          "troubleshooting"@en ;
                          dcterms:title "Manufacturing Quality Troubleshooting Ontology"@en ;
-                         dcterms:bibliographicCitation "Bischof, S., Rötzer, F., Xavier Parreira, J., Filtz, E. (2026). Manufacturing Quality Troubleshooting Ontology (MQTO), Version 1.0. https://w3id.org/mqto/1.0"@en ;
                          bibo:doi "10.5281/zenodo.19571023" ;
                          bibo:status <http://purl.org/ontology/bibo/status/published> ;
-                         dcterms:issued "2026-04-27"^^xsd:date ;
                          vann:preferredNamespacePrefix "mqto" ;
                          vann:preferredNamespaceUri "https://w3id.org/mqto#" ;
                          schema:codeRepository <https://github.com/dg-assist/mqto> ;
                          schema:funding <https://projekte.ffg.at/projekt/4641766> ;
                          schema:logo <https://dg-assist.github.io/mqto/logo.png> ;
-                         skos:editorialNote "PKO alignment: mqto:Countermeasure subclasses pko:Procedure, mqto:CountermeasureStep aligns with p-plan:Step, mqto:CountermeasureExecution extends pko:ProcedureExecution, and mqto:CountermeasureStepExecution extends pko:StepExecution. Both ontologies follow a specification/execution pattern, though MQTO uses LIS (lis:Specified/lis:Actual with lis:implements) while PKO uses P-PLAN/PROV. Key difference: MQTO externalizes step ordering via CountermeasureStepList containers for reusability, while PKO embeds ordering directly in steps via pko:nextStep."@en ;
                          rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
                          rdfs:label "Manufacturing Quality Troubleshooting Ontology"@en ;
-                         owl:versionInfo "1.0.0" .
+                         owl:versionInfo "1.0.0" ;
+                         skos:editorialNote "PKO alignment: mqto:Countermeasure subclasses pko:Procedure, mqto:CountermeasureStep aligns with p-plan:Step, mqto:CountermeasureExecution extends pko:ProcedureExecution, and mqto:CountermeasureStepExecution extends pko:StepExecution. Both ontologies follow a specification/execution pattern, though MQTO uses LIS (lis:Specified/lis:Actual with lis:implements) while PKO uses P-PLAN/PROV. Key difference: MQTO externalizes step ordering via CountermeasureStepList containers for reusability, while PKO embeds ordering directly in steps via pko:nextStep."@en .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/abstract
+dcterms:abstract rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/bibliographicCitation
+dcterms:bibliographicCitation rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/subject
+dcterms:subject rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/ontology/bibo/doi
+bibo:doi rdf:type owl:AnnotationProperty .
+
+
+###  http://schema.org/codeRepository
+schema:codeRepository rdf:type owl:AnnotationProperty .
+
+
+###  http://schema.org/funding
+schema:funding rdf:type owl:AnnotationProperty .
+
+
+###  http://schema.org/logo
+schema:logo rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2004/02/skos/core#editorialNote
+skos:editorialNote rdf:type owl:AnnotationProperty .
+
+
+###  https://schema.org/affiliation
+<https://schema.org/affiliation> rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Datatypes
+#################################################################
+
+###  http://www.w3.org/2001/XMLSchema#duration
+xsd:duration rdf:type rdfs:Datatype .
 
 
 #################################################################
@@ -203,9 +249,9 @@ mqto:first rdf:type owl:ObjectProperty ;
            rdfs:domain mqto:CountermeasureStepList ;
            rdfs:range mqto:CountermeasureStep ;
            rdfs:comment "Points to the first CountermeasureStep in an ordered list."@en ;
-           skos:editorialNote "The list structure enables step reuse across Countermeasure procedures without embedding order into steps."@en ;
            rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-           rdfs:label "first"@en .
+           rdfs:label "first"@en ;
+           skos:editorialNote "The list structure enables step reuse across Countermeasure procedures without embedding order into steps."@en .
 
 
 ###  https://w3id.org/mqto#hasFailure
@@ -232,9 +278,9 @@ mqto:hasStepList rdf:type owl:ObjectProperty ;
                  rdfs:domain mqto:Countermeasure ;
                  rdfs:range mqto:CountermeasureStepList ;
                  rdfs:comment "Links a Countermeasure to its ordered step container."@en ;
-                 skos:editorialNote "Named hasStepList rather than hasStep to distinguish from pko:hasStep, which links directly to step instances rather than to a list container."@en ;
                  rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                 rdfs:label "has step list"@en .
+                 rdfs:label "has step list"@en ;
+                 skos:editorialNote "Named hasStepList rather than hasStep to distinguish from pko:hasStep, which links directly to step instances rather than to a list container."@en .
 
 
 ###  https://w3id.org/mqto#metricBelongsTo
@@ -365,9 +411,9 @@ mqto:resultProperty rdf:type owl:ObjectProperty ;
                     rdfs:domain mqto:Metric ;
                     rdfs:range rdf:Property ;
                     rdfs:comment "Specifies which data property of mqto:Result instances a Metric reads to obtain its input value. Each Metric selects exactly one property from Result instances that may carry multiple measured values."@en ;
-                    skos:editorialNote "Meta-level construct: an object property whose value is itself a property. Falls outside normal OWL type-system validation but provides a simple, declarative way to parameterise Metrics without requiring SPARQL property-path strings or SHACL infrastructure."@en ;
                     rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
                     rdfs:label "result property"@en ;
+                    skos:editorialNote "Meta-level construct: an object property whose value is itself a property. Falls outside normal OWL type-system validation but provides a simple, declarative way to parameterise Metrics without requiring SPARQL property-path strings or SHACL infrastructure."@en ;
                     skos:example """A PLC cycle produces one Result with three data properties:
   ex:Result_Shot042  ex:temperature  718.3 ;
                      ex:pressure     980.0 ;
@@ -436,9 +482,9 @@ mqto:abortedTime rdf:type owl:DatatypeProperty ;
 mqto:assessmentMethod rdf:type owl:DatatypeProperty ;
                       rdfs:domain mqto:Metric ;
                       rdfs:comment "The calculation method applied by a Metric to compute its value from observations. Describes the algorithm or statistical function used to aggregate data."@en ;
-                      skos:example "average, maximum, standard deviation, trend slope"@en ;
                       rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                      rdfs:label "assessment method"@en .
+                      rdfs:label "assessment method"@en ;
+                      skos:example "average, maximum, standard deviation, trend slope"@en .
 
 
 ###  https://w3id.org/mqto#assessmentValue
@@ -464,9 +510,9 @@ mqto:calculatedValue rdf:type owl:DatatypeProperty ;
                      rdfs:domain mqto:MetricAssessment ;
                      rdfs:range xsd:double ;
                      rdfs:comment "The computed numeric value of a MetricAssessment, preserving the quantitative result before threshold comparison."@en ;
-                     skos:editorialNote "Unit of measurement is inherited from the implemented Metric specification."@en ;
                      rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                     rdfs:label "calculated value"@en .
+                     rdfs:label "calculated value"@en ;
+                     skos:editorialNote "Unit of measurement is inherited from the implemented Metric specification."@en .
 
 
 ###  https://w3id.org/mqto#completionTime
@@ -489,11 +535,11 @@ mqto:endTime rdf:type owl:DatatypeProperty ;
 ###  https://w3id.org/mqto#identifier
 mqto:identifier rdf:type owl:DatatypeProperty ;
                 rdfs:comment "A unique identifier for an entity. Enables correlation between ontology instances and external systems."@en ;
-                skos:example "machine serial number, material batch code, signal name, process ID"@en ;
-                skos:editorialNote "Conceptually aligned with dcterms:identifier but declared independently because OWL 2 DL does not permit a datatype property to be a subproperty of an annotation property."@en ;
                 rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
                 rdfs:label "identifier"@en ;
-                rdfs:seeAlso dcterms:identifier .
+                rdfs:seeAlso dcterms:identifier ;
+                skos:editorialNote "Conceptually aligned with dcterms:identifier but declared independently because OWL 2 DL does not permit a datatype property to be a subproperty of an annotation property."@en ;
+                skos:example "machine serial number, material batch code, signal name, process ID"@en .
 
 
 ###  https://w3id.org/mqto#itemWindowSize
@@ -501,9 +547,9 @@ mqto:itemWindowSize rdf:type owl:DatatypeProperty ;
                     rdfs:domain mqto:Metric ;
                     rdfs:range xsd:integer ;
                     rdfs:comment "The number of production items over which a Metric aggregates observations. Complements timeWindowSize for item-count-based windows."@en ;
-                    skos:example "last 10 shots, last 5 batches"@en ;
                     rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                    rdfs:label "item window size"@en .
+                    rdfs:label "item window size"@en ;
+                    skos:example "last 10 shots, last 5 batches"@en .
 
 
 ###  https://w3id.org/mqto#lowerBound
@@ -511,9 +557,9 @@ mqto:lowerBound rdf:type owl:DatatypeProperty ;
                 rdfs:domain mqto:Metric ;
                 rdfs:range xsd:double ;
                 rdfs:comment "The minimum acceptable threshold value for a Metric. Values below the lowerBound indicate a threshold violation."@en ;
-                skos:editorialNote "Stored as dimensionless xsd:double; unit of measurement determined by the Metric's associated Signal."@en ;
                 rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                rdfs:label "lower bound"@en .
+                rdfs:label "lower bound"@en ;
+                skos:editorialNote "Stored as dimensionless xsd:double; unit of measurement determined by the Metric's associated Signal."@en .
 
 
 ###  https://w3id.org/mqto#occurrenceTime
@@ -530,9 +576,9 @@ mqto:score rdf:type owl:DatatypeProperty ;
            rdfs:domain mqto:CountermeasureExecution ;
            rdfs:range xsd:double ;
            rdfs:comment "A numeric score or confidence value assigned to a CountermeasureExecution recommendation. Used by diagnostic systems to rank countermeasure suggestions."@en ;
-           skos:editorialNote "The interpretation and scale of scores is application-specific."@en ;
            rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-           rdfs:label "score"@en .
+           rdfs:label "score"@en ;
+           skos:editorialNote "The interpretation and scale of scores is application-specific."@en .
 
 
 ###  https://w3id.org/mqto#startTime
@@ -548,9 +594,9 @@ mqto:timeWindowSize rdf:type owl:DatatypeProperty ;
                     rdfs:domain mqto:Metric ;
                     rdfs:range xsd:duration ;
                     rdfs:comment "The duration over which a Metric aggregates observations, expressed as xsd:duration. Defines how far back in time to consider observation data."@en ;
-                    skos:example "PT5M (5 minutes), PT1H (1 hour)"@en ;
                     rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                    rdfs:label "time window size"@en .
+                    rdfs:label "time window size"@en ;
+                    skos:example "PT5M (5 minutes), PT1H (1 hour)"@en .
 
 
 ###  https://w3id.org/mqto#upperBound
@@ -558,9 +604,9 @@ mqto:upperBound rdf:type owl:DatatypeProperty ;
                 rdfs:domain mqto:Metric ;
                 rdfs:range xsd:double ;
                 rdfs:comment "The maximum acceptable threshold value for a Metric. Values above the upperBound indicate a threshold violation."@en ;
-                skos:editorialNote "Stored as dimensionless xsd:double; unit of measurement determined by the Metric's associated Signal."@en ;
                 rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                rdfs:label "upper bound"@en .
+                rdfs:label "upper bound"@en ;
+                skos:editorialNote "Stored as dimensionless xsd:double; unit of measurement determined by the Metric's associated Signal."@en .
 
 
 ###  https://w3id.org/mqto#weight
@@ -572,9 +618,9 @@ mqto:weight rdf:type owl:DatatypeProperty ;
                         ] ;
             rdfs:range xsd:int ;
             rdfs:comment "A relative ranking weight. For Failure Modes: severity or priority. For Countermeasures: effectiveness or preference. Provides anchor points for external ranking logic."@en ;
-            skos:editorialNote "The ontology does not prescribe the ranking algorithm itself; interpretation is application-specific."@en ;
             rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-            rdfs:label "weight"@en .
+            rdfs:label "weight"@en ;
+            skos:editorialNote "The ontology does not prescribe the ranking algorithm itself; interpretation is application-specific."@en .
 
 
 #################################################################
@@ -594,9 +640,9 @@ mqto:ActuableProperty rdf:type owl:Class ;
                       rdfs:subClassOf sosa:ActuableProperty ,
                                       mqto:Property ;
                       rdfs:comment "An actuable property of a FailureSource that can be controlled or modified via Actuations. Implements a Signal specification."@en ;
-                      skos:example "setpoints, valve positions, motor speeds, control commands"@en ;
                       rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                      rdfs:label "Actuable Property"@en .
+                      rdfs:label "Actuable Property"@en ;
+                      skos:example "setpoints, valve positions, motor speeds, control commands"@en .
 
 
 ###  https://w3id.org/mqto#Actuation
@@ -667,9 +713,9 @@ mqto:CountermeasureStep rdf:type owl:Class ;
                                         lis:Activity ,
                                         lis:Specified ;
                         rdfs:comment "A reusable specification of a single remediation step."@en ;
-                        skos:editorialNote "Ordering is externalized to CountermeasureStepList containers, enabling the same step to appear in multiple Countermeasure procedures."@en ;
                         rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                        rdfs:label "Countermeasure Step"@en .
+                        rdfs:label "Countermeasure Step"@en ;
+                        skos:editorialNote "Ordering is externalized to CountermeasureStepList containers, enabling the same step to appear in multiple Countermeasure procedures."@en .
 
 
 ###  https://w3id.org/mqto#CountermeasureStepExecution
@@ -689,18 +735,18 @@ mqto:CountermeasureStepExecution rdf:type owl:Class ;
 ###  https://w3id.org/mqto#CountermeasureStepList
 mqto:CountermeasureStepList rdf:type owl:Class ;
                             rdfs:comment "An ordered, reusable container of CountermeasureSteps. Uses an OWL-native linked list pattern (mqto:first / mqto:rest), terminated by mqto:nil."@en ;
-                            skos:editorialNote "Uses explicit OWL class and property definitions instead of rdf:List for reasoner compatibility. Standard rdf:List creates known issues with OWL reasoners due to blank node handling and recursive structure reasoning. See OWL 2 Primer Section 4.2."@en ;
                             rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
                             rdfs:label "Countermeasure Step List"@en ;
-                            rdfs:seeAlso <http://www.w3.org/TR/owl2-primer/> .
+                            rdfs:seeAlso <http://www.w3.org/TR/owl2-primer/> ;
+                            skos:editorialNote "Uses explicit OWL class and property definitions instead of rdf:List for reasoner compatibility. Standard rdf:List creates known issues with OWL reasoners due to blank node handling and recursive structure reasoning. See OWL 2 Primer Section 4.2."@en .
 
 
 ###  https://w3id.org/mqto#DataEvent
 mqto:DataEvent rdf:type owl:Class ;
                rdfs:comment "Common superclass of mqto:Observation and mqto:Actuation. Allows MetricAssessments to be grounded in either sensor observations or actuation events."@en ;
-               skos:editorialNote "Mirrors the mqto:Property pattern which bridges ObservableProperty and ActuableProperty at the actual level."@en ;
                rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-               rdfs:label "Data Event"@en .
+               rdfs:label "Data Event"@en ;
+               skos:editorialNote "Mirrors the mqto:Property pattern which bridges ObservableProperty and ActuableProperty at the actual level."@en .
 
 
 ###  https://w3id.org/mqto#FailureMode
@@ -759,9 +805,9 @@ mqto:FailureOccurrence rdf:type owl:Class ;
 mqto:FailureSource rdf:type owl:Class ;
                    rdfs:subClassOf lis:Actual ;
                    rdfs:comment "Abstract superclass for actual-level counterparts of FailureSourceCategory. Concrete subclasses: PhysicalMachine, PhysicalMaterial, and MethodExecution."@en ;
-                   skos:editorialNote "sosa:FeatureOfInterest is declared on the physical subclasses rather than here because MethodExecution requires lis:Activity (lis:Temporal), which is disjoint with sosa:FeatureOfInterest (lis:Object) in the ido-ssn alignment."@en ;
                    rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                   rdfs:label "Failure Source"@en .
+                   rdfs:label "Failure Source"@en ;
+                   skos:editorialNote "sosa:FeatureOfInterest is declared on the physical subclasses rather than here because MethodExecution requires lis:Activity (lis:Temporal), which is disjoint with sosa:FeatureOfInterest (lis:Object) in the ido-ssn alignment."@en .
 
 
 ###  https://w3id.org/mqto#FailureSourceCategory
@@ -824,10 +870,10 @@ mqto:Measurement rdf:type owl:Class ;
                  rdfs:subClassOf sosa:Procedure ,
                                  mqto:FailureSourceCategory ;
                  rdfs:comment "A measurement procedure or inspection method. Specifies how a quantity is measured or a quality attribute is assessed."@en ;
-                 skos:editorialNote "Actual-level counterpart expressed via sosa:Observation instances referencing this procedure through sosa:usedProcedure."@en ;
-                 skos:editorialNote "As a subclass of sosa:Procedure (lis:InformationObject in ido-ssn), Measurement is an information object rather than a physical thing or activity."@en ;
                  rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                 rdfs:label "Measurement"@en .
+                 rdfs:label "Measurement"@en ;
+                 skos:editorialNote "Actual-level counterpart expressed via sosa:Observation instances referencing this procedure through sosa:usedProcedure."@en ,
+                                    "As a subclass of sosa:Procedure (lis:InformationObject in ido-ssn), Measurement is an information object rather than a physical thing or activity."@en .
 
 
 ###  https://w3id.org/mqto#Method
@@ -865,9 +911,9 @@ mqto:MethodExecution rdf:type owl:Class ;
                                        owl:someValuesFrom mqto:Method
                                      ] ;
                      rdfs:comment "Actual execution of a Method, the instance-level counterpart of Method. A concrete temporal manufacturing activity."@en ;
-                     skos:editorialNote "Not a sosa:FeatureOfInterest because that maps to lis:Object in ido-ssn, which is disjoint with lis:Temporal. Observations are expressed indirectly through participants."@en ;
                      rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                     rdfs:label "Method Execution"@en .
+                     rdfs:label "Method Execution"@en ;
+                     skos:editorialNote "Not a sosa:FeatureOfInterest because that maps to lis:Object in ido-ssn, which is disjoint with lis:Temporal. Observations are expressed indirectly through participants."@en .
 
 
 ###  https://w3id.org/mqto#Metric
@@ -930,9 +976,9 @@ mqto:ObservableProperty rdf:type owl:Class ;
                         rdfs:subClassOf sosa:ObservableProperty ,
                                         mqto:Property ;
                         rdfs:comment "An observable property of a FailureSource that can be measured via Observations. Implements a Signal specification."@en ;
-                        skos:editorialNote "Subclassing both sosa:ObservableProperty (an abstract quality type) and lis:Actual (via mqto:Property) reflects that each individual is a concrete instance tied to a particular item, not a reusable abstract type. This parallels how sosa:ObservableProperty instances are used in practice (e.g. 'the temperature of this specific machine part')."@en ;
                         rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-                        rdfs:label "Observable Property"@en .
+                        rdfs:label "Observable Property"@en ;
+                        skos:editorialNote "Subclassing both sosa:ObservableProperty (an abstract quality type) and lis:Actual (via mqto:Property) reflects that each individual is a concrete instance tied to a particular item, not a reusable abstract type. This parallels how sosa:ObservableProperty instances are used in practice (e.g. 'the temperature of this specific machine part')."@en .
 
 
 ###  https://w3id.org/mqto#Observation
@@ -1014,9 +1060,9 @@ mqto:Signal rdf:type owl:Class ;
                               owl:allValuesFrom mqto:FailureSourceCategory
                             ] ;
             rdfs:comment "A specified data channel such as a PLC variable, analog line, fieldbus message, or time-series stream. Describes channel metadata rather than particular observations or sensor devices. Actual-level counterpart: Property."@en ;
-            skos:editorialNote "Distinct from sosa:ObservableProperty (an observable quality of a feature of interest at the actual level) and from sosa:Sensor (the physical observing device). The actual-level counterpart is mqto:Property."@en ;
             rdfs:isDefinedBy <https://w3id.org/mqto/1.0> ;
-            rdfs:label "Signal"@en .
+            rdfs:label "Signal"@en ;
+            skos:editorialNote "Distinct from sosa:ObservableProperty (an observable quality of a feature of interest at the actual level) and from sosa:Sensor (the physical observing device). The actual-level counterpart is mqto:Property."@en .
 
 
 #################################################################
@@ -1040,7 +1086,8 @@ mqto:Signal rdf:type owl:Class ;
 ###  https://orcid.org/0000-0003-2661-5575
 <https://orcid.org/0000-0003-2661-5575> rdf:type owl:NamedIndividual ,
                                                  foaf:Person ;
-                                        foaf:name "Florian Rötzer" .
+                                        foaf:name "Florian Rötzer" ;
+                                        <https://schema.org/affiliation> "https://www.ait.ac.at/" .
 
 
 ###  https://orcid.org/0000-0003-3445-0504
@@ -1048,6 +1095,12 @@ mqto:Signal rdf:type owl:Class ;
                                                  foaf:Person ;
                                         foaf:name "Erwin Filtz" ;
                                         <https://schema.org/affiliation> <https://www.siemens.at/> .
+
+
+###  https://w3id.org/mqto
+<https://w3id.org/mqto> rdf:type owl:NamedIndividual ;
+                        dcterms:creator <https://orcid.org/0000-0001-9521-8907> .
+
 
 ###  https://w3id.org/mqto#nil
 mqto:nil rdf:type owl:NamedIndividual ,
@@ -1064,4 +1117,4 @@ mqto:nil rdf:type owl:NamedIndividual ,
 <https://www.siemens.at/> rdfs:label "Siemens AG Österreich" .
 
 
-###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
+###  Generated by the OWL API (version 4.5.25.2023-02-15T19:15:49Z) https://github.com/owlcs/owlapi
